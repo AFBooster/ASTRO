@@ -1,2 +1,3 @@
 # ASTRO
-a simple site
+a simple site setup to host the SCOB dashboard site
+
