@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1733">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Tonight on the Moon — SCOB Night-Sky</title>
+<style>
+:root{ color-scheme: dark;
+  --navy:#0b1733; --navy2:#13224a; --navy3:#1a2b56; --gold:#f5c542; --cyan:#5bd6e0;
+  --white:#f4f6fb; --mute:#9fb0d6; --line:#33406b; --red:#ff6b6b; --green:#5fd38a; }
+*{box-sizing:border-box;}
+body{margin:0;background:var(--navy);color:var(--white);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px;line-height:1.5;}
+body.night{filter:sepia(1) hue-rotate(-50deg) saturate(4) brightness(.75);}
+.wrap{max-width:1100px;margin:0 auto;padding:0 22px 48px;}
+header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1733 88%,rgba(11,23,51,0));padding:16px 0 12px;}
+.titlerow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+h1{font-size:22px;margin:0;color:var(--gold);}
+.loc{font-size:13px;color:var(--mute);flex:1 1 auto;}
+.backlink{font-size:13px;color:var(--cyan);text-decoration:none;border:1px solid var(--cyan);border-radius:9px;padding:7px 12px;font-weight:700;white-space:nowrap;}
+.ctrlbar{display:flex;align-items:center;gap:10px;margin-top:11px;background:var(--navy2);border:1px solid var(--line);border-radius:12px;padding:10px 13px;flex-wrap:wrap;}
+.datein{font-size:15px;font-weight:700;background:var(--navy3);color:var(--white);border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-family:inherit;}
+.datein::-webkit-calendar-picker-indicator{filter:invert(.85);opacity:.85;}
+.btnmini{background:transparent;color:var(--cyan);border:1px solid var(--cyan);border-radius:9px;padding:8px 13px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.daynote{font-size:13px;color:var(--mute);}
+.grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:6px;}
+@media(min-width:860px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);}}
+.card{background:var(--navy2);border:1px solid var(--line);border-radius:14px;padding:17px 18px;margin-top:16px;}
+.grid .card{margin-top:0;}
+.card h2{margin:0 0 11px;font-size:15px;color:var(--gold);}
+.card h2 small{color:var(--mute);font-weight:400;font-size:12px;}
+.phrow{display:flex;gap:14px;flex-wrap:wrap;align-items:baseline;}
+.phrow .pct{font-size:30px;font-weight:700;color:var(--gold);line-height:1;}
+.phrow .nm{font-size:15px;font-weight:600;}
+.meta{font-size:13px;color:var(--mute);margin-top:8px;line-height:1.6;}
+.meta b{color:var(--white);}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:2px;}
+.pill.ok{background:rgba(95,211,138,.16);color:#9be9b8;}
+.pill.warn{background:rgba(245,197,66,.15);color:#f7d984;}
+.pill.bad{background:rgba(255,107,107,.16);color:#ffb4b4;}
+#disc{margin:8px auto 0;display:block;max-width:420px;width:100%;height:auto;}
+.hint{font-size:12px;color:var(--mute);line-height:1.55;}
+.frow{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+.frow:last-child{border-bottom:0;}
+.frow .ic{font-size:18px;flex:0 0 26px;text-align:center;}
+.frow b{font-size:14.5px;}
+.frow .ty{color:var(--cyan);font-size:12px;font-weight:600;margin-left:6px;}
+.frow .note{font-size:13px;color:var(--mute);margin-top:1px;}
+.frow .tip{font-size:12px;color:var(--gold);margin-top:2px;}
+.tsub{font-size:12px;color:var(--mute);}
+.foot{margin-top:26px;font-size:11.5px;color:var(--mute);line-height:1.7;border-top:1px solid var(--line);padding-top:14px;}
+.foot a{color:var(--cyan);}
+.btnrow{text-align:center;margin:20px 0 4px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btnrow a{color:var(--cyan);font-weight:700;font-size:13px;border:1px solid var(--cyan);border-radius:9px;padding:8px 16px;display:inline-block;text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="titlerow">
+      <h1>🌕 Tonight on the Moon</h1>
+      <div class="loc">Science Centre Observatory, Jurong · what to point at along the terminator</div>
+      <a class="backlink" href="scob-dashboard-v3.html">← Night-sky dashboard</a>
+    </div>
+    <div class="ctrlbar">
+      <input type="date" id="datePick" class="datein">
+      <button id="nextFri" class="btnmini">↺ Next Fri</button>
+      <button id="tonight" class="btnmini">● Tonight</button>
+      <button id="nightBtn" class="btnmini">🌙 Night</button>
+      <span class="daynote" id="dayNote"></span>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2>The Moon at 8:30 pm <small id="forDate"></small></h2>
+      <div class="phrow"><span class="pct" id="pct">—</span><span class="nm" id="phName">—</span><span id="upChip"></span></div>
+      <div class="meta" id="meta">—</div>
+      <svg id="disc" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="hint" style="margin-top:9px;text-align:center">North up · Mare Crisium side (lunar east) on the right — matches binoculars; most telescopes flip or rotate this. Gold rings = tonight's terminator features. Libration ignored (±8°).</div>
+    </div>
+    <div class="card">
+      <h2 id="termHead">⭕ On the terminator tonight</h2>
+      <div class="hint" id="termHint"></div>
+      <div id="featured"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🌊 Also worth showing <small>— well-lit tonight</small></h2>
+    <div id="alsoLit"></div>
+  </div>
+
+  <div class="card">
+    <h2>📖 Why the terminator? <small>— 20-second docent script</small></h2>
+    <div class="meta" style="margin-top:0">
+      The <b>terminator</b> is the sunrise/sunset line. Along it the Sun sits just above the lunar horizon, so every crater rim and mountain throws a long black shadow — that's where the Moon looks three-dimensional. Away from it, under high sun, the same terrain looks flat and washed out.
+      On the deck <b>Celestron CPC / C6</b>, start at ~80× to frame the whole disc, then go to <b>150–250×</b> on the features listed above. The <b>40&nbsp;cm</b> in the main dome resolves rilles and craterlets on steady nights. A <b>full Moon</b> has no visible terminator — switch the story to the bright ray systems of Tycho and Copernicus instead.
+    </div>
+  </div>
+
+  <div class="btnrow">
+    <a href="scob-dashboard-v3.html">← Night-sky dashboard</a>
+    <a href="telescope-types.html">🔭 Telescope guide</a>
+  </div>
+  <div class="foot">
+    Phase, terminator position (selenographic colongitude, approx. ±2°) and feature visibility computed in your browser for 8:30 pm SGT on the chosen date — works offline. Feature positions compiled from the IAU/USGS <a href="https://planetarynames.wr.usgs.gov" target="_blank" rel="noopener">Gazetteer of Planetary Nomenclature</a> · lunar theory — P. Schlyter · Science Centre Observatory, Singapore.
+  </div>
+</div>
+<script>
+"use strict";
+const LAT=1.3342, LON=103.7357, RAD=Math.PI/180, DEG=180/Math.PI;
+const rev=x=>((x%360)+360)%360;
+const w180=x=>{let v=rev(x);return v>180?v-360:v;};
+const pad=n=>String(n).padStart(2,'0');
+const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function dateLabel(y,m,d){const wd=new Date(Date.UTC(y,m,d,12)).getUTCDay();return `${WD[wd]}, ${d} ${MON[m]} ${y}`;}
+function timeLabel(hh,mm){const ap=hh<12?'am':'pm';let h=hh%12||12;return h+':'+pad(mm)+' '+ap;}
+function sgtNow(){const n=new Date();return new Date(n.getTime()+(n.getTimezoneOffset()+480)*60000);}
+function nextFridayYMD(){const d=sgtNow();const dow=d.getDay();let add=(5-dow+7)%7;if(add===0&&d.getHours()>22)add=7;d.setDate(d.getDate()+add);return{y:d.getFullYear(),m:d.getMonth(),d:d.getDate()};}
+function jd(date){return date.getTime()/86400000+2440587.5;}
+function sun(d){const w=rev(282.9404+4.70935e-5*d),M=rev(356.0470+0.9856002585*d),e=0.016709-1.151e-9*d;
+  let E=M+e*DEG*Math.sin(M*RAD)*(1+e*Math.cos(M*RAD));const xv=Math.cos(E*RAD)-e,yv=Math.sqrt(1-e*e)*Math.sin(E*RAD);
+  const v=rev(Math.atan2(yv,xv)*DEG),r=Math.sqrt(xv*xv+yv*yv);return{lon:rev(v+w),M,r};}
+function moon(d){const N=rev(125.1228-0.0529538083*d),i=5.1454,w=rev(318.0634+0.1643573223*d),a=60.2666,e=0.0549,M=rev(115.3654+13.0649929509*d);
+  let E=M+e*DEG*Math.sin(M*RAD)*(1+e*Math.cos(M*RAD));for(let k=0;k<5;k++)E=E-(E-e*DEG*Math.sin(E*RAD)-M)/(1-e*Math.cos(E*RAD));
+  const xv=a*(Math.cos(E*RAD)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E*RAD);const v=rev(Math.atan2(yv,xv)*DEG),r=Math.sqrt(xv*xv+yv*yv);
+  let xe=r*(Math.cos(N*RAD)*Math.cos((v+w)*RAD)-Math.sin(N*RAD)*Math.sin((v+w)*RAD)*Math.cos(i*RAD));
+  let ye=r*(Math.sin(N*RAD)*Math.cos((v+w)*RAD)+Math.cos(N*RAD)*Math.sin((v+w)*RAD)*Math.cos(i*RAD));
+  let ze=r*Math.sin((v+w)*RAD)*Math.sin(i*RAD);let lon=rev(Math.atan2(ye,xe)*DEG),lat=Math.atan2(ze,Math.sqrt(xe*xe+ye*ye))*DEG;
+  const s=sun(d);const Lm=rev(N+w+M),Ls=rev(s.M+282.9404),D=rev(Lm-Ls),F=rev(Lm-N);
+  lon+=-1.274*Math.sin((M-2*D)*RAD)+0.658*Math.sin(2*D*RAD)-0.186*Math.sin(s.M*RAD)-0.059*Math.sin((2*M-2*D)*RAD)-0.057*Math.sin((M-2*D+s.M)*RAD)+0.053*Math.sin((M+2*D)*RAD)+0.046*Math.sin((2*D-s.M)*RAD)+0.041*Math.sin((M-s.M)*RAD)-0.035*Math.sin(D*RAD)-0.031*Math.sin((M+s.M)*RAD);
+  lat+=-0.173*Math.sin((F-2*D)*RAD)-0.055*Math.sin((M-F-2*D)*RAD)-0.046*Math.sin((M+F-2*D)*RAD)+0.033*Math.sin((F+2*D)*RAD)+0.017*Math.sin((2*M+F)*RAD);
+  return{lon:rev(lon),lat,slon:s.lon};}
+function eclToEq(lon,lat,d){const ecl=(23.4393-3.563e-7*d)*RAD;const xl=Math.cos(lon*RAD)*Math.cos(lat*RAD),yl=Math.sin(lon*RAD)*Math.cos(lat*RAD),zl=Math.sin(lat*RAD);
+  const xe=xl,ye=yl*Math.cos(ecl)-zl*Math.sin(ecl),ze=yl*Math.sin(ecl)+zl*Math.cos(ecl);
+  return{ra:rev(Math.atan2(ye,xe)*DEG),dec:Math.atan2(ze,Math.sqrt(xe*xe+ye*ye))*DEG};}
+function moonAltAt(date){const J=jd(date),dd=J-2451545.0,ddS=J-2451543.5;const lst=rev(280.46061837+360.98564736629*dd+LON);
+  const m=moon(ddS),eq=eclToEq(m.lon,m.lat,ddS);const H=(lst-eq.ra)*RAD,dr=eq.dec*RAD,l=LAT*RAD;
+  return Math.asin(Math.sin(dr)*Math.sin(l)+Math.cos(dr)*Math.cos(l)*Math.cos(H))*DEG;}
+function moonRiseSet(y,m,d){
+  const H0=0.125,startMs=Date.UTC(y,m,d,0,0,0)-8*3600000,step=5*60000,span=24*3600000;
+  let prev=moonAltAt(new Date(startMs))-H0,rise=null,set=null;
+  function toSGT(ms){const dt=new Date(ms+8*3600000);let h=dt.getUTCHours(),mi=dt.getUTCMinutes();const ap=h<12?'am':'pm';let h12=h%12||12;return h12+':'+pad(mi)+ap;}
+  function refine(a,b,r){for(let k=0;k<22;k++){const mid=(a+b)/2,v=moonAltAt(new Date(mid))-H0;if((v>=0)===r)b=mid;else a=mid;}return toSGT((a+b)/2);}
+  for(let t=step;t<=span;t+=step){const cur=moonAltAt(new Date(startMs+t))-H0;
+    if(prev<0&&cur>=0&&rise===null)rise=refine(startMs+t-step,startMs+t,true);
+    if(prev>=0&&cur<0&&set===null)set=refine(startMs+t-step,startMs+t,false);prev=cur;}
+  return{rise,set};}
+
+// name, lon (°E+), lat (°N+), type, description, scope tip (optional)
+const FEATURES=[
+ ["Mare Crisium",59.1,17.0,"mare","A perfect oval lava 'sea' — the first big feature lit on a young Moon.",""],
+ ["Langrenus",60.9,-8.9,"crater","132-km crater with terraced walls and twin central peaks, near the east limb.",""],
+ ["Petavius",60.4,-25.4,"crater","Huge crater with a dramatic rille slashing across its domed floor.","40 cm shows the rille"],
+ ["Cleomedes",55.5,27.7,"crater","Fine 126-km walled plain just north of Mare Crisium.",""],
+ ["Mare Fecunditatis",51.3,-7.8,"mare","Sea of Fertility — home of the striking twin craters Messier A & B.",""],
+ ["Mare Nectaris",35.5,-15.2,"mare","Small round sea ringed by a magnificent crater trio on its west shore.",""],
+ ["Theophilus, Cyrillus & Catharina",26.4,-11.4,"crater","The Moon's most photogenic crater trio — three ages of lunar history side by side.","Showpiece at 150–250×"],
+ ["Rupes Altai",22.6,-24.3,"scarp","A 480-km curved cliff that lights up as a bright arc at lunar sunrise.",""],
+ ["Mare Tranquillitatis",31.4,8.4,"mare","The Sea of Tranquility — Apollo 11 landed on its south-west shore in 1969.",""],
+ ["Tranquility Base (Apollo 11)",23.47,0.67,"site","Where humans first stepped onto another world, 20 July 1969. The site is far too small to see — but the audience loves knowing where it is.",""],
+ ["Mare Serenitatis",17.5,28.0,"mare","Sea of Serenity, rimmed by the lovely crater Posidonius.",""],
+ ["Posidonius",29.9,31.8,"crater","95-km crater with a fractured, rille-crossed floor.","40 cm at 250×"],
+ ["Hyginus & Ariadaeus rilles",6.3,7.7,"rille","Long cracks snaking across the plains — classic high-power targets.","6\" apo or 40 cm"],
+ ["Cassini",4.6,40.2,"crater","Flooded ring holding two crisp little craterlets.",""],
+ ["Alpine Valley",3.2,48.5,"valley","A 166-km gash sliced clean through the lunar Alps.","40 cm may show its central rille"],
+ ["Montes Apenninus",-3.7,18.9,"mountains","The Moon's mightiest range, 5-km peaks casting long spires of shadow. Apollo 15 landed at its foot.",""],
+ ["Archimedes",-4.0,29.7,"crater","83-km lava-flooded ring on the Imbrium shore, with Aristillus & Autolycus.",""],
+ ["Ptolemaeus, Alphonsus & Arzachel",-1.8,-9.2,"crater","Three giants marching down the Moon's centre line — the classic half-Moon showpiece.","Showpiece at 150×"],
+ ["Rupes Recta (Straight Wall)",-7.8,-22.1,"scarp","A 110-km fault that appears as a stark pencil line for just a night or two.","Catch it — it vanishes under high sun"],
+ ["Plato",-9.3,51.6,"crater","The 'black lake' — a dark-floored ring on Imbrium's north shore. Counting its tiny craterlets is a classic 40 cm test.",""],
+ ["Tycho",-11.4,-43.3,"crater","Young, sharp and deep — source of the great rays that wrap the full Moon.",""],
+ ["Clavius",-14.4,-58.4,"crater","Vast 225-km arena with a graceful arc of craterlets across its floor.","Craterlet arc from ~6\" up"],
+ ["Eratosthenes",-11.3,14.5,"crater","Crisp 58-km crater at the tail of the Apennines.",""],
+ ["Copernicus",-20.1,9.6,"crater","'The Monarch of the Moon' — 93 km of terraced walls and central peaks.","Showpiece in any scope"],
+ ["Mare Imbrium",-15.6,32.8,"mare","The great Sea of Rains — an impact basin 1,145 km across.",""],
+ ["Sinus Iridum",-31.5,44.1,"bay","The Bay of Rainbows — becomes the glittering 'Jewelled Handle' at local sunrise.",""],
+ ["Bullialdus",-22.2,-20.7,"crater","A mini-Copernicus in Mare Nubium.",""],
+ ["Mare Humorum",-38.6,-24.4,"mare","Small round sea with the superb crater Gassendi on its north shore.",""],
+ ["Gassendi",-40.0,-17.5,"crater","110-km ring webbed with rilles — a 40 cm favourite.","40 cm at 250×"],
+ ["Kepler",-38.0,8.1,"crater","Bright little ray crater in Oceanus Procellarum.",""],
+ ["Aristarchus",-47.4,23.7,"crater","The brightest spot on the Moon — dazzling even in a 6\".",""],
+ ["Schickard",-54.6,-44.4,"crater","227-km walled plain with a striped floor, near the SW limb.",""],
+ ["Grimaldi",-68.6,-5.2,"mare","Dark-floored basin right on the west limb — an easy naked-eye-in-binoculars dark spot.",""],
+ ["Oceanus Procellarum",-57.0,18.0,"mare","The vast Ocean of Storms, covering the Moon's western quarter.",""]
+];
+const ICONS={mare:"🌊",crater:"⭕",scarp:"⛰️",rille:"〰️",valley:"⛰️",mountains:"⛰️",bay:"🌊",site:"🚩"};
+const RAYS=["Tycho","Copernicus","Kepler","Aristarchus"];
+const MARIA=[ // [lon,lat,rx°,ry°] approximate blobs for the disc drawing
+ [59.1,17.0,11,9],[51.3,-7.8,11,14],[35.5,-15.2,9,9],[31.4,8.4,14,12],[17.5,28.0,13,12],
+ [-15.6,32.8,19,15],[-31.5,44.1,7,6],[-57.0,18.0,22,26],[-38.6,-24.4,10,9],[-15.0,-21.0,13,10],
+ [0,56,25,7],[-68.6,-5.2,5,5],[16,-1,7,6]
+];
+function phaseName(ill,wax){if(ill<0.03)return"New Moon";if(ill>0.97)return"Full Moon";
+  if(ill<0.47)return(wax?"Waxing":"Waning")+" Crescent";if(ill<0.53)return(wax?"First":"Last")+" Quarter";
+  return(wax?"Waxing":"Waning")+" Gibbous";}
+
+function recompute(y,m,d){
+  const dt=new Date(Date.UTC(y,m,d,12,30,0)); // 20:30 SGT
+  const dS=jd(dt)-2451543.5;
+  const mo=moon(dS);
+  const D=rev(mo.lon-mo.slon);                 // elongation in longitude
+  const elong=Math.acos(Math.cos(D*RAD)*Math.cos(mo.lat*RAD))*DEG;
+  const illum=(1-Math.cos(elong*RAD))/2, pct=Math.round(illum*100), waxing=D<180;
+  const l0=w180(180-D);                        // subsolar selenographic longitude
+  const colong=rev(90-l0);                     // selenographic colongitude
+  const age=D/12.191;                          // days since new
+  const termM=w180(l0-90), termE=w180(l0+90);  // sunrise / sunset terminators
+  let V,Vkind;
+  if(Math.abs(termM)<=Math.abs(termE)){V=termM;Vkind='sunrise';}else{V=termE;Vkind='sunset';}
+  const lit=L=>Math.abs(w180(L-l0))<90;
+
+  document.getElementById('forDate').textContent='— '+dateLabel(y,m,d);
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('phName').textContent=phaseName(illum,waxing);
+  const rs=moonRiseSet(y,m,d);
+  const a1930=moonAltAt(new Date(Date.UTC(y,m,d,11,30))),a2200=moonAltAt(new Date(Date.UTC(y,m,d,14,0)));
+  let chip;
+  if(a1930>5&&a2200>5)chip='<span class="pill ok">up all session</span>';
+  else if(a1930>5)chip='<span class="pill warn">sets mid-session — catch it early</span>';
+  else if(a2200>5)chip='<span class="pill warn">rises during the session</span>';
+  else chip='<span class="pill bad">not up 7:30–10 pm</span>';
+  document.getElementById('upChip').innerHTML=chip;
+  document.getElementById('meta').innerHTML=
+    '🌗 Rises <b>'+(rs.rise||'—')+'</b> · sets <b>'+(rs.set||'—')+'</b> &nbsp;·&nbsp; age <b>'+age.toFixed(1)+' days</b> &nbsp;·&nbsp; colongitude <b>'+colong.toFixed(0)+'°</b>'
+    +(V!=null?' &nbsp;·&nbsp; '+Vkind+' terminator at selenographic <b>'+Math.abs(V).toFixed(0)+'° '+(V>=0?'E':'W')+'</b>':'')
+    +(pct<12&&pct>2?'<br>🌒 Thin crescent — look for <b>earthshine</b>: the night side glowing faintly with light reflected off Earth.':'');
+  const wd=new Date(Date.UTC(y,m,d,12)).getUTCDay();
+  document.getElementById('dayNote').innerHTML=wd===5?'<span style="color:var(--green)">Friday — session night ✓</span>':'Sessions run Fridays';
+
+  drawDisc(l0,V,pct);
+  renderFeatured(l0,V,Vkind,waxing,pct,illum);
+  renderAlso(lit,V,pct);
+  document.getElementById('datePick').value=`${y}-${pad(m+1)}-${pad(d)}`;
+}
+
+function proj(L,B,R){return[R*Math.sin(L*RAD)*Math.cos(B*RAD),-R*Math.sin(B*RAD)];}
+function drawDisc(l0,V,pct){
+  const R=118,C=140;
+  let s='<defs><radialGradient id="lun" cx="42%" cy="38%"><stop offset="0%" stop-color="#f4ecd4"/><stop offset="75%" stop-color="#d9cba2"/><stop offset="100%" stop-color="#bfae83"/></radialGradient>'
+   +'<clipPath id="dc"><circle cx="'+C+'" cy="'+C+'" r="'+R+'"/></clipPath></defs>';
+  s+='<circle cx="'+C+'" cy="'+C+'" r="'+R+'" fill="url(#lun)" stroke="#caa419" stroke-width="1"/>';
+  // maria
+  s+='<g clip-path="url(#dc)">';
+  MARIA.forEach(mb=>{const p=proj(mb[0],mb[1],R);const rx=mb[2]*R/90*Math.cos(mb[0]*RAD)*1.35,ry=mb[3]*R/90*1.35;
+    if(rx>1)s+='<ellipse cx="'+(C+p[0]).toFixed(1)+'" cy="'+(C+p[1]).toFixed(1)+'" rx="'+rx.toFixed(1)+'" ry="'+ry.toFixed(1)+'" fill="#8f855f" opacity="0.55"/>';});
+  // craters (subtle)
+  FEATURES.forEach(f=>{if(f[3]!=='crater')return;const p=proj(f[1],f[2],R);
+    s+='<circle cx="'+(C+p[0]).toFixed(1)+'" cy="'+(C+p[1]).toFixed(1)+'" r="2.6" fill="#a99c72" stroke="#7d724f" stroke-width="0.7" opacity="0.85"/>';});
+  // shadow
+  if(V!=null&&pct<97){
+    const darkRight=Math.sin((l0+180)*RAD)>0; // dark hemisphere centre on eastern (right) side?
+    let pts='';
+    for(let phi=90;phi>=-90;phi-=6){const x=R*Math.sin(V*RAD)*Math.cos(phi*RAD),y=-R*Math.sin(phi*RAD);pts+=(C+x).toFixed(1)+','+(C+y).toFixed(1)+' ';}
+    const dir=darkRight?-1:1; // S pole → N pole around the dark limb (right limb: angle decreasing)
+    for(let t=0;t<=30;t++){const a=(90+dir*180*t/30)*RAD;
+      pts+=(C+R*Math.cos(a)).toFixed(1)+','+(C+R*Math.sin(a)).toFixed(1)+' ';}
+    s+='<polygon points="'+pts+'" fill="#0b1733" opacity="0.93"/>';
+  }else if(pct<3){s+='<circle cx="'+C+'" cy="'+C+'" r="'+R+'" fill="#0b1733" opacity="0.93"/>';}
+  s+='</g>';
+  // featured markers on top
+  (window.__featured||[]).forEach(f=>{const p=proj(f[1],f[2],R);
+    s+='<circle cx="'+(C+p[0]).toFixed(1)+'" cy="'+(C+p[1]).toFixed(1)+'" r="6.5" fill="none" stroke="#f5c542" stroke-width="1.6"/>';});
+  s+='<text x="'+C+'" y="14" fill="#8ea3d8" font-size="10" text-anchor="middle">N</text>'
+   +'<text x="'+(2*C-10)+'" y="'+(C+3)+'" fill="#8ea3d8" font-size="10">E</text>'
+   +'<text x="6" y="'+(C+3)+'" fill="#8ea3d8" font-size="10">W</text>';
+  document.getElementById('disc').innerHTML=s;
+}
+
+function renderFeatured(l0,V,Vkind,waxing,pct,illum){
+  const el=document.getElementById('featured'),hd=document.getElementById('termHead'),hint=document.getElementById('termHint');
+  window.__featured=[];
+  if(illum<0.03){
+    hd.textContent='🌑 New Moon';hint.textContent='';
+    el.innerHTML='<div class="tsub">The Moon is essentially between us and the Sun — not observable tonight. A perfect deep-sky week instead: check the dashboard\'s target list.</div>';return;
+  }
+  if(illum>0.93){
+    hd.textContent='🌕 Full-Moon rays — no terminator tonight';
+    hint.textContent='Under vertical sunlight nothing casts shadows, so switch the story: full Moon is ray night.';
+    el.innerHTML=FEATURES.filter(f=>RAYS.indexOf(f[0])>=0).map(f=>{window.__featured.push(f);
+      return '<div class="frow"><div class="ic">🌟</div><div><b>'+f[0]+' rays</b><span class="ty">ray system</span><div class="note">'+f[4]+'</div></div></div>';}).join('')
+      +'<div class="frow"><div class="ic">💡</div><div><b>Tip</b><div class="note">A Moon filter (or high magnification) tames the glare on the deck scopes; look also for the bright splash of Aristarchus.</div></div></div>';
+    drawDisc(l0,V,pct);return;
+  }
+  const near=FEATURES.map(f=>({f:f,dd:Math.abs(w180(f[1]-V))})).filter(x=>x.dd<=13).sort((a,b)=>a.dd-b.dd);
+  hd.textContent='⭕ On the terminator tonight — '+(Vkind==='sunrise'?'sunrise line':'sunset line');
+  hint.innerHTML=(Vkind==='sunrise'
+    ?'The Sun is <b>rising</b> over these features — long shadows to the west of every rim, shrinking visibly over the evening.'
+    :'The Sun is <b>setting</b> here — shadows stretch and swallow these features over the coming nights; last chance to catch them.')
+    +' Ranked by distance from the terminator.';
+  if(!near.length){
+    el.innerHTML='<div class="tsub">The terminator sits over open mare plains tonight — no marquee feature within ~13°. Cruise the line itself at 150× and enjoy the shadowed craterlets; the list refreshes tomorrow.</div>';
+  }else{
+    el.innerHTML=near.map(x=>{const f=x.f;window.__featured.push(f);
+      return '<div class="frow"><div class="ic">'+(ICONS[f[3]]||'⭕')+'</div><div><b>'+f[0]+'</b><span class="ty">'+f[3]+' · '+x.dd.toFixed(0)+'° off the line</span><div class="note">'+f[4]+'</div>'+(f[5]?'<div class="tip">🔭 '+f[5]+'</div>':'')+'</div></div>';
+    }).join('');
+  }
+  drawDisc(l0,V,pct);
+}
+function renderAlso(lit,V,pct){
+  const el=document.getElementById('alsoLit');
+  if(pct<3){el.innerHTML='<div class="tsub">—</div>';return;}
+  const rows=FEATURES.filter(f=>lit(f[1])&&(V==null||Math.abs(w180(f[1]-V))>13)&&(f[3]==='mare'||RAYS.indexOf(f[0])>=0||f[3]==='site'));
+  el.innerHTML=rows.map(f=>'<div class="frow"><div class="ic">'+(ICONS[f[3]]||'⭕')+'</div><div><b>'+f[0]+'</b><span class="ty">'+f[3]+'</span><div class="note">'+f[4]+'</div></div></div>').join('')
+    ||'<div class="tsub">Only a thin sliver is lit — everything interesting is on the terminator list above.</div>';
+}
+
+function fromInput(){const v=document.getElementById('datePick').value;if(!v)return;const p=v.split('-').map(Number);recompute(p[0],p[1]-1,p[2]);}
+document.getElementById('datePick').addEventListener('change',fromInput);
+document.getElementById('nextFri').addEventListener('click',()=>{const f=nextFridayYMD();recompute(f.y,f.m,f.d);});
+document.getElementById('tonight').addEventListener('click',()=>{const n=sgtNow();recompute(n.getFullYear(),n.getMonth(),n.getDate());});
+function applyNight(on){document.body.classList.toggle('night',on);document.getElementById('nightBtn').textContent=on?'☀️ Day':'🌙 Night';try{localStorage.setItem('scobNight',on?'1':'0');}catch(e){}}
+document.getElementById('nightBtn').addEventListener('click',()=>applyNight(!document.body.classList.contains('night')));
+try{applyNight(localStorage.getItem('scobNight')==='1');}catch(e){}
+const f0=nextFridayYMD();recompute(f0.y,f0.m,f0.d);
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>

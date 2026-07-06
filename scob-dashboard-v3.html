@@ -124,6 +124,44 @@ body.night{filter:grayscale(100%) sepia(100%) hue-rotate(-44deg) saturate(380%) 
 .wxh.best{border-color:#5bd6e0}
 .wxh .hl{color:#5bd6e0;font-weight:700}
 .wxh b{color:var(--white)}
+/* v3.2 additions: events · ISS · haze · plan · briefing */
+.evrow{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.45}
+.evrow:last-child{border-bottom:0}
+.evrow .evic{font-size:17px;flex:0 0 auto;line-height:1.3}
+.evrow.dim{opacity:.55}
+.evwhen{color:var(--cyan);font-size:11px;font-weight:700;margin-left:4px;white-space:nowrap}
+.evnote{color:var(--mute);font-size:12px}
+.planslot{margin-bottom:10px}
+.planslot h3{margin:0 0 4px;font-size:13px;color:var(--cyan)}
+.planslot ul{margin:0;padding-left:18px;font-size:12.5px}
+.planslot li{margin:3px 0}
+#haze{margin-top:10px;font-size:12.5px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--mute)}
+#haze b.ok{color:#5fd38a}#haze b.warn{color:#f5c542}#haze b.bad{color:#ff6b6b}
+#briefWrap{display:none;position:fixed;inset:0;z-index:100000;background:rgba(5,10,25,.94);overflow:auto;padding:14px;-webkit-overflow-scrolling:touch}
+#briefBar{max-width:760px;margin:0 auto 10px;display:flex;gap:8px;justify-content:flex-end}
+#briefBar button{border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
+#briefPrint{background:var(--gold);color:var(--navy)}
+#briefClose{background:transparent;color:var(--white);border:1px solid var(--line)}
+#briefing{max-width:760px;margin:0 auto;background:#fff;color:#1a2440;border-radius:10px;padding:24px 26px;font-size:13px;line-height:1.55}
+#briefing h1{font-size:19px;margin:0 0 3px;color:#0b1733}
+#briefing .sub{color:#5a6480;font-size:12px}
+#briefing h2{font-size:14px;margin:16px 0 6px;color:#0b1733;border-bottom:2px solid #f5c542;padding-bottom:3px}
+#briefing table{width:100%;border-collapse:collapse;font-size:12px}
+#briefing th{color:#5a6480;font-weight:700}
+#briefing td,#briefing th{padding:4px 6px;border-bottom:1px solid #e4e8f2;text-align:left;vertical-align:top}
+#briefing .evrow{border-color:#e4e8f2}
+#briefing .evnote,#briefing .tsub{color:#5a6480}
+#briefing .evwhen,#briefing .planslot h3{color:#0b6b75}
+#briefing .tag{background:#eef2fa;color:#1a2440;border-radius:6px;padding:1px 7px;font-size:11px}
+#briefing .src{font-size:10.5px;color:#7a84a0;margin-top:16px;line-height:1.5}
+@media print{
+  body.briefing-open{filter:none!important;background:#fff!important}
+  body.briefing-open *{visibility:hidden!important}
+  body.briefing-open #briefWrap,body.briefing-open #briefWrap *{visibility:visible!important}
+  body.briefing-open #briefWrap{position:absolute!important;left:0!important;top:0!important;width:100%!important;background:#fff!important;padding:0!important;overflow:visible!important}
+  body.briefing-open #briefBar{display:none!important}
+  body.briefing-open #briefing{max-width:none;border-radius:0;padding:0}
+}
 </style>
 <style id="mobileCSS">
 :root{ color-scheme: dark;
@@ -134,9 +172,19 @@ body{margin:0;background:var(--navy);color:var(--white);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   font-size:16px;line-height:1.5;padding-bottom:env(safe-area-inset-bottom);}
 .wrap{max-width:560px;margin:0 auto;padding:0 14px 36px;}
-header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#0b1733 80%,rgba(11,23,51,.0));padding:14px 0 10px;}
+header{padding:0 0 10px;}
+#slimbar{position:sticky;top:0;z-index:20;margin:0 -14px;padding:8px 14px 9px;padding-top:calc(8px + env(safe-area-inset-top));background:#0b1733;border-bottom:1px solid var(--line);box-shadow:0 6px 18px rgba(0,0,0,.35);}
+#slimbar .sb1{display:flex;align-items:center;gap:10px;}
+#slimbar h1{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px;}
+#slimbar .cdslim{font-size:14px;font-weight:700;color:var(--cyan);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#slimbar .sb2{display:flex;gap:6px;margin-top:7px;}
+#slimbar .sb2 .datein{flex:1;min-width:0;font-size:13px;font-weight:600;padding:6px 8px;border-radius:8px;}
+#slimbar .sb2 .datein.t{flex:0 0 auto;width:auto;}
+#slimbar .btnmini{font-size:12px;padding:6px 9px;border-radius:8px;}
+#slimbar .sb3{display:flex;align-items:center;gap:8px;margin-top:7px;}
+#slimbar #timeSlider{flex:1;margin:0;min-width:0;}
 h1{font-size:17px;margin:0;color:var(--gold);}
-.loc{font-size:12px;color:var(--mute);margin-top:2px;}
+.loc{font-size:12px;color:var(--mute);margin-top:6px;}
 .daterow{display:flex;align-items:center;gap:8px;margin-top:10px;background:var(--navy2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;flex-wrap:wrap;}
 .datein{flex:1;min-width:120px;font-size:16px;font-weight:700;background:var(--navy3);color:var(--white);border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-family:inherit;}
 .datein.t{flex:0 0 auto;width:auto;min-width:0;}
@@ -235,6 +283,44 @@ details[open] summary::after{content:" \25BE";}
 .wxh.best{border-color:#5bd6e0}
 .wxh .hl{color:#5bd6e0;font-weight:700}
 .wxh b{color:var(--white)}
+/* v3.2 additions: events · ISS · haze · plan · briefing */
+.evrow{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;line-height:1.45}
+.evrow:last-child{border-bottom:0}
+.evrow .evic{font-size:17px;flex:0 0 auto;line-height:1.3}
+.evrow.dim{opacity:.55}
+.evwhen{color:var(--cyan);font-size:11px;font-weight:700;margin-left:4px;white-space:nowrap}
+.evnote{color:var(--mute);font-size:12px}
+.planslot{margin-bottom:10px}
+.planslot h3{margin:0 0 4px;font-size:13px;color:var(--cyan)}
+.planslot ul{margin:0;padding-left:18px;font-size:12.5px}
+.planslot li{margin:3px 0}
+#haze{margin-top:10px;font-size:12.5px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;color:var(--mute)}
+#haze b.ok{color:#5fd38a}#haze b.warn{color:#f5c542}#haze b.bad{color:#ff6b6b}
+#briefWrap{display:none;position:fixed;inset:0;z-index:100000;background:rgba(5,10,25,.94);overflow:auto;padding:14px;-webkit-overflow-scrolling:touch}
+#briefBar{max-width:760px;margin:0 auto 10px;display:flex;gap:8px;justify-content:flex-end}
+#briefBar button{border:0;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer;font-size:13px}
+#briefPrint{background:var(--gold);color:var(--navy)}
+#briefClose{background:transparent;color:var(--white);border:1px solid var(--line)}
+#briefing{max-width:760px;margin:0 auto;background:#fff;color:#1a2440;border-radius:10px;padding:24px 26px;font-size:13px;line-height:1.55}
+#briefing h1{font-size:19px;margin:0 0 3px;color:#0b1733}
+#briefing .sub{color:#5a6480;font-size:12px}
+#briefing h2{font-size:14px;margin:16px 0 6px;color:#0b1733;border-bottom:2px solid #f5c542;padding-bottom:3px}
+#briefing table{width:100%;border-collapse:collapse;font-size:12px}
+#briefing th{color:#5a6480;font-weight:700}
+#briefing td,#briefing th{padding:4px 6px;border-bottom:1px solid #e4e8f2;text-align:left;vertical-align:top}
+#briefing .evrow{border-color:#e4e8f2}
+#briefing .evnote,#briefing .tsub{color:#5a6480}
+#briefing .evwhen,#briefing .planslot h3{color:#0b6b75}
+#briefing .tag{background:#eef2fa;color:#1a2440;border-radius:6px;padding:1px 7px;font-size:11px}
+#briefing .src{font-size:10.5px;color:#7a84a0;margin-top:16px;line-height:1.5}
+@media print{
+  body.briefing-open{filter:none!important;background:#fff!important}
+  body.briefing-open *{visibility:hidden!important}
+  body.briefing-open #briefWrap,body.briefing-open #briefWrap *{visibility:visible!important}
+  body.briefing-open #briefWrap{position:absolute!important;left:0!important;top:0!important;width:100%!important;background:#fff!important;padding:0!important;overflow:visible!important}
+  body.briefing-open #briefBar{display:none!important}
+  body.briefing-open #briefing{max-width:none;border-radius:0;padding:0}
+}
 </style>
 <style>
 #viewSwitch{position:fixed;bottom:12px;right:12px;z-index:99999;display:flex;gap:3px;
@@ -260,6 +346,7 @@ details[open] summary::after{content:" \25BE";}
       <button id="nextFri" class="btnmini">↺ Next Fri</button>
       <button id="nowBtn" class="btnmini">● Now</button>
       <button id="nightBtn" class="btnmini">🌙 Night</button>
+      <button id="briefBtn" class="btnmini">📄 Briefing</button>
       <div class="cdwrap"><span class="l">Countdown to chosen time</span><span class="v" id="cd">—</span></div>
       <input type="range" id="timeSlider" min="0" max="1439" step="5" value="1230" aria-label="Time of night">
     </div>
@@ -287,11 +374,13 @@ details[open] summary::after{content:" \25BE";}
         </div>
         <div class="moon-rs" id="moonRS">—</div>
         <div class="moon-note" id="moonNote">—</div>
+        <div style="margin-top:11px"><a href="moon-tonight.html" style="color:var(--cyan);font-weight:700;font-size:12.5px;text-decoration:none;border:1px solid var(--cyan);border-radius:8px;padding:6px 11px;display:inline-block">🌕 Tonight on the Moon — craters on the terminator →</a></div>
       </div>
 
       <div class="card">
         <h2>🪐 Solar system <small id="ssTime"></small></h2>
         <div id="solar"></div>
+        <div id="planetDetail"></div>
         <div class="hint" id="ssNote" style="margin-top:12px;margin-bottom:0"></div>
       </div>
     </div>
@@ -307,12 +396,37 @@ details[open] summary::after{content:" \25BE";}
     <div id="targets"></div>
   </div>
 
+  <div class="card" style="margin-top:16px;">
+    <h2>✨ Double &amp; carbon stars <small>— moon-proof showpieces</small></h2>
+    <div class="hint">Tight star pairs and vivid red carbon stars punch straight through moonlight and Jurong's light pollution — ideal when the faint fuzzies are washed out. Best in the 40 cm and 6" apo at high power.</div>
+    <div id="doubles" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:10px"></div>
+  </div>
+
+  <div class="grid" style="margin-top:16px;">
+    <div class="card">
+      <h2>📅 Conjunctions &amp; special events <small>— next 3 weeks from the chosen date</small></h2>
+      <div id="conj"></div>
+      <div id="events"></div>
+    </div>
+    <div class="card">
+      <h2>🛰️ Satellite passes <small>— ISS · Tiangong · Hubble · 7–11 pm on the chosen night</small></h2>
+      <div id="iss"><div class="tsub">Loading…</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h2>📋 Session run-sheet <small>— suggested per-instrument plan</small></h2>
+    <div id="plan"></div>
+  </div>
+
   <div class="grid" style="margin-top:16px;">
     <div class="card">
       <h2>🌧️ Weather — go / no-go</h2>
       <p class="wnote" id="weatherNote">—</p>
       <button id="wxBtn" class="wxbtn">↻ Refresh live forecast</button>
       <div id="liveWx" class="livewx" style="display:none;"></div>
+    <div id="haze" style="display:none"></div>
+    <div id="radar" style="display:none"></div>
       <div class="btns">
         <a class="btn" href="https://www.weather.gov.sg/weather-forecast-2hrnowcast-2/" target="_blank" rel="noopener">MSS 2-hr Nowcast ↗</a>
         <a class="btn alt" href="https://www.facebook.com/ScienceCentreObservatory/" target="_blank" rel="noopener">SCOB Facebook ↗</a>
@@ -329,29 +443,38 @@ details[open] summary::after{content:" \25BE";}
     </div>
   </div>
 
+  <div style="text-align:center;margin:18px 0 4px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <a href="telescope-types.html" style="color:var(--cyan);font-weight:700;font-size:13px;border:1px solid var(--cyan);border-radius:9px;padding:8px 16px;display:inline-block;text-decoration:none">🔭 Telescope types, mounts &amp; magnification guide →</a>
+    <a href="moon-tonight.html" style="color:var(--gold);font-weight:700;font-size:13px;border:1px solid var(--gold);border-radius:9px;padding:8px 16px;display:inline-block;text-decoration:none">🌕 Tonight on the Moon →</a>
+  </div>
   <div class="foot">
     Moon, planet positions & target altitudes computed in your browser for the date & time you pick. Weather notes are seasonal guidance — use the Nowcast for the live call.<br>
-    Sources: deep-sky catalogue — <a href="https://astropixels.com/messier/messiercat.html" target="_blank" rel="noopener" style="color:var(--cyan)">AstroPixels Messier</a> &amp; <a href="https://astropixels.com/caldwell/caldwellcat.html" target="_blank" rel="noopener" style="color:var(--cyan)">Caldwell</a> catalogs (F. Espenak) · planetary elements — P. Schlyter · weather — MSS Weather.gov.sg &amp; Open-Meteo · SCOB.
+    Sources: deep-sky catalogue — <a href="https://astropixels.com/messier/messiercat.html" target="_blank" rel="noopener" style="color:var(--cyan)">AstroPixels Messier</a> &amp; <a href="https://astropixels.com/caldwell/caldwellcat.html" target="_blank" rel="noopener" style="color:var(--cyan)">Caldwell</a> catalogs (F. Espenak) · planetary elements — P. Schlyter · weather — MSS Weather.gov.sg &amp; Open-Meteo · haze — <a href="https://data.gov.sg" target="_blank" rel="noopener" style="color:var(--cyan)">NEA via data.gov.sg</a> · sky events — <a href="https://www.seasky.org/astronomy/astronomy-calendar-2026.html" target="_blank" rel="noopener" style="color:var(--cyan)">Sea &amp; Sky astronomy calendar</a> · ISS/Tiangong/Hubble orbits — <a href="https://celestrak.org" target="_blank" rel="noopener" style="color:var(--cyan)">CelesTrak</a> TLEs via satellite.js · Jupiter/Saturn detail — J. Meeus series, GRS longitude per JUPOS trend · rain radar — MSS · SCOB.
   </div>
 </div>
 
 </div>
 <div id="mobileRoot" style="display:none">
 <div class="wrap">
-  <header>
-    <h1>SCOB Night-Sky · mobile</h1>
-    <div class="loc">Science Centre Observatory, Jurong · session Fri 7:30–10:00 pm</div>
-    <div class="daterow">
+  <div id="slimbar">
+    <div class="sb1">
+      <h1>SCOB Night-Sky</h1>
+      <span class="cdslim" id="cdSlim">—</span>
+    </div>
+    <div class="sb2">
       <input type="date" id="datePick" class="datein">
       <input type="time" id="timePick" class="datein t" value="20:30">
       <button id="nextFri" class="btnmini">↺ Fri</button>
     </div>
-    <div class="cdrow"><span class="l">Countdown to chosen time</span><span class="v" id="cd">—</span></div>
-    <input type="range" id="timeSlider" min="0" max="1439" step="5" value="1230" aria-label="Time of night">
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button id="nowBtn" class="btnmini" style="flex:1">● Now</button>
-      <button id="nightBtn" class="btnmini" style="flex:1">🌙 Night</button>
+    <div class="sb3">
+      <button id="nowBtn" class="btnmini">● Now</button>
+      <input type="range" id="timeSlider" min="0" max="1439" step="5" value="1230" aria-label="Time of night">
+      <button id="nightBtn" class="btnmini">🌙</button>
+      <button id="briefBtn" class="btnmini">📄</button>
     </div>
+  </div>
+  <header>
+    <div class="loc">Science Centre Observatory, Jurong · session Fri 7:30–10:00 pm</div>
     <div class="daynote" id="dayNote"></div>
     <div id="glance"></div>
   </header>
@@ -367,11 +490,13 @@ details[open] summary::after{content:" \25BE";}
     </div>
     <div class="moon-rs" id="moonRS">—</div>
     <div class="moon-note" id="moonNote">—</div>
+    <div style="margin-top:10px"><a href="moon-tonight.html" style="color:var(--cyan);font-weight:700;font-size:12.5px;text-decoration:none;border:1px solid var(--cyan);border-radius:8px;padding:6px 11px;display:inline-block">🌕 Tonight on the Moon →</a></div>
   </div>
 
   <div class="card">
     <h2>🪐 Solar system <small id="ssTime"></small></h2>
     <div id="solar"></div>
+    <div id="planetDetail"></div>
     <div class="hint" id="ssNote" style="margin-top:11px;margin-bottom:0"></div>
   </div>
 
@@ -392,10 +517,34 @@ details[open] summary::after{content:" \25BE";}
   </div>
 
   <div class="card">
+    <h2>✨ Double &amp; carbon stars <small>— moon-proof</small></h2>
+    <div class="hint">Star pairs and red carbon stars punch through moonlight and light pollution — ideal when faint fuzzies are washed out.</div>
+    <div id="doubles"></div>
+  </div>
+
+  <div class="card">
+    <h2>📅 Conjunctions &amp; special events <small>— next 3 weeks</small></h2>
+    <div id="conj"></div>
+    <div id="events"></div>
+  </div>
+
+  <div class="card">
+    <h2>🛰️ Satellite passes <small>— ISS · Tiangong · Hubble · 7–11 pm</small></h2>
+    <div id="iss"><div class="tsub">Loading…</div></div>
+  </div>
+
+  <div class="card">
+    <h2>📋 Session run-sheet</h2>
+    <div id="plan"></div>
+  </div>
+
+  <div class="card">
     <h2>🌧️ Weather — go / no-go</h2>
     <p class="wnote" id="weatherNote">—</p>
     <button id="wxBtn" class="wxbtn">↻ Refresh live forecast</button>
     <div id="liveWx" class="livewx" style="display:none;"></div>
+    <div id="haze" style="display:none"></div>
+    <div id="radar" style="display:none"></div>
     <div class="btns">
       <a class="btn" href="https://www.weather.gov.sg/weather-forecast-2hrnowcast-2/" target="_blank" rel="noopener">MSS 2-hr Nowcast ↗</a>
       <a class="btn alt" href="https://www.facebook.com/ScienceCentreObservatory/" target="_blank" rel="noopener">SCOB Facebook ↗</a>
@@ -418,12 +567,23 @@ details[open] summary::after{content:" \25BE";}
     <b>Tip:</b> add this page to your home screen (Share → Add to Home Screen) to open it like an app. Pick any date & time to plan — everything is computed on-device and works offline.
   </div>
 
+  <div style="text-align:center;margin:18px 0 4px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <a href="telescope-types.html" style="color:var(--cyan);font-weight:700;font-size:13px;border:1px solid var(--cyan);border-radius:9px;padding:8px 16px;display:inline-block;text-decoration:none">🔭 Telescope types, mounts &amp; magnification guide →</a>
+    <a href="moon-tonight.html" style="color:var(--gold);font-weight:700;font-size:13px;border:1px solid var(--gold);border-radius:9px;padding:8px 16px;display:inline-block;text-decoration:none">🌕 Tonight on the Moon →</a>
+  </div>
   <div class="foot">
     Moon, planet positions & target altitudes computed on your phone for the date & time you pick. Weather notes are seasonal guidance — use the Nowcast for the live call.<br>
-    Sources: deep-sky catalogue — <a href="https://astropixels.com/messier/messiercat.html" target="_blank" rel="noopener" style="color:var(--cyan)">AstroPixels Messier</a> &amp; <a href="https://astropixels.com/caldwell/caldwellcat.html" target="_blank" rel="noopener" style="color:var(--cyan)">Caldwell</a> catalogs (F. Espenak) · planetary elements — P. Schlyter · weather — MSS Weather.gov.sg &amp; Open-Meteo · SCOB.
+    Sources: deep-sky catalogue — <a href="https://astropixels.com/messier/messiercat.html" target="_blank" rel="noopener" style="color:var(--cyan)">AstroPixels Messier</a> &amp; <a href="https://astropixels.com/caldwell/caldwellcat.html" target="_blank" rel="noopener" style="color:var(--cyan)">Caldwell</a> catalogs (F. Espenak) · planetary elements — P. Schlyter · weather — MSS Weather.gov.sg &amp; Open-Meteo · haze — <a href="https://data.gov.sg" target="_blank" rel="noopener" style="color:var(--cyan)">NEA via data.gov.sg</a> · sky events — <a href="https://www.seasky.org/astronomy/astronomy-calendar-2026.html" target="_blank" rel="noopener" style="color:var(--cyan)">Sea &amp; Sky astronomy calendar</a> · ISS/Tiangong/Hubble orbits — <a href="https://celestrak.org" target="_blank" rel="noopener" style="color:var(--cyan)">CelesTrak</a> TLEs via satellite.js · Jupiter/Saturn detail — J. Meeus series, GRS longitude per JUPOS trend · rain radar — MSS · SCOB.
   </div>
 </div>
 
+</div>
+<div id="briefWrap">
+  <div id="briefBar">
+    <button id="briefPrint">🖨 Print / save as PDF</button>
+    <button id="briefClose">✕ Close</button>
+  </div>
+  <div id="briefing"></div>
 </div>
 <div id="viewSwitch">
   <button type="button" data-mode="auto">Auto</button>
@@ -482,7 +642,8 @@ function planetEq(p,d,sLon,sR){const g=arr=>arr[0]+arr[1]*d;
   const R=Math.sqrt(xg*xg+yg*yg+zg*zg);
   let FV=Math.acos(Math.max(-1,Math.min(1,(r*r+R*R-sR*sR)/(2*r*R))))*DEG;
   let mag=p.b+5*Math.log10(r*R)+p.c*FV; if(p===PLAN.Venus)mag+=4.2e-7*FV*FV*FV;
-  return{ra:rev(Math.atan2(ye,xe)*DEG),dec:Math.atan2(ze,Math.sqrt(xe*xe+ye*ye))*DEG,mag};}
+  return{ra:rev(Math.atan2(ye,xe)*DEG),dec:Math.atan2(ze,Math.sqrt(xe*xe+ye*ye))*DEG,mag,
+    lam:rev(Math.atan2(yg,xg)*DEG),bet:Math.atan2(zg,Math.sqrt(xg*xg+yg*yg))*DEG};}
 
 let LST=0, MOONEQ={ra:0,dec:0}, pct=0, illum=0, waxing=true, startUTC=0;
 let WXNOTE="";
@@ -533,6 +694,8 @@ function renderGlance(){
     +'<span class="gc">🌙 Moon <b>'+pct+'% · '+(ma.alt>0?'up '+Math.round(ma.alt)+'°':'down')+'</b></span>'
     +(bp?'<span class="gc">🪐 Best planet <b>'+bp+'</b></span>':'')
     +(tt?'<span class="gc">🔭 Top target <b>'+tt+'</b></span>':'')
+    +(EVT.length?'<span class="gc">'+EVT[0][1]+' <b>'+EVT[0][2]+'</b></span>':'')
+    +(ISSCHIP?'<span class="gc">🛰️ Best pass <b>'+ISSCHIP+'</b></span>':'')
     +'<span class="gc">🌅 Sunrise <b>'+(st.rise||'—')+'</b></span>'
     +'</div>';
 }
@@ -796,6 +959,164 @@ function renderTargets(){
   document.getElementById('hint').innerHTML=(mode==='seestar')
     ?`📷 <b style="color:var(--cyan)">Seestar S30 Pro</b> · 2 h of 30 s subs. Emission & planetary nebulae score as imageable through the dual-band Hα/OIII filter even under this ${pct}% Moon; galaxies stay Moon-limited; single stars hidden. Moon = distance from the Moon. ${shownNote}`
     :`👁 <b style="color:var(--gold)">Visual</b> · eyepiece views. Faint nebulae & galaxies flagged washed-out when the Moon is &gt;55% lit. Moon = distance from the Moon. ${shownNote}`;}
+
+// ==== v3.3: Jupiter/Saturn eyepiece detail · double & carbon stars · conjunctions · rain radar ====
+function angSep(ra1,dec1,ra2,dec2){const a=Math.sin(dec1*RAD)*Math.sin(dec2*RAD)+Math.cos(dec1*RAD)*Math.cos(dec2*RAD)*Math.cos((ra1-ra2)*RAD);return Math.acos(Math.max(-1,Math.min(1,a)))*DEG;}
+function jovePhys(dt){ // Meeus, Astronomical Algorithms ch. 43/44 low-accuracy physical ephemeris
+  const d=jd(dt)-2451545.0;
+  const V=rev(172.74+0.00111588*d),M=rev(357.529+0.9856003*d);
+  const N=rev(20.020+0.0830853*d+0.329*Math.sin(V*RAD));
+  const J2=rev(66.115+0.9025179*d-0.329*Math.sin(V*RAD));
+  const A=1.915*Math.sin(M*RAD)+0.020*Math.sin(2*M*RAD);
+  const B=5.555*Math.sin(N*RAD)+0.168*Math.sin(2*N*RAD);
+  const K=J2+A-B;
+  const Re=1.00014-0.01671*Math.cos(M*RAD)-0.00014*Math.cos(2*M*RAD);
+  const rj=5.20872-0.25208*Math.cos(N*RAD)-0.00611*Math.cos(2*N*RAD);
+  const Dj=Math.sqrt(rj*rj+Re*Re-2*rj*Re*Math.cos(K*RAD));
+  const psi=Math.asin(Math.max(-1,Math.min(1,Re/Dj*Math.sin(K*RAD))))*DEG;
+  const dd=d-Dj/173;
+  return{dd:dd,psi:psi,B:B,w2:rev(187.23+870.1869088*dd+psi-B)};
+}
+function grsLon(dt){return rev(91+1.75*((jd(dt)-2461192.5)/30.44));} // 91° System II on 1 Jun 2026 (JUPOS trend), drifting ~1.75°/month
+function grsTransitTimes(){
+  const out=[];if(!GL)return out;let prev=null;
+  for(let min=17*60;min<=24*60;min+=2){
+    const dt=new Date(Date.UTC(GL.y,GL.m,GL.d,Math.floor(min/60)-8,min%60,0));
+    const diff=((grsLon(dt)-jovePhys(dt).w2+540)%360)-180;
+    if(prev!==null&&prev>0&&diff<=0)out.push(timeLabel(Math.floor(min/60)%24,min%60));
+    prev=diff;
+  }
+  return out;
+}
+function galilean(dt){
+  const p=jovePhys(dt),dd=p.dd,corr=p.psi-p.B;
+  let u1=rev(163.8069+203.4058646*dd+corr),u2=rev(358.4140+101.2916335*dd+corr),
+      u3=rev(5.7176+50.2345180*dd+corr),u4=rev(224.8092+21.4879800*dd+corr);
+  const G=rev(331.18+50.310482*dd),H=rev(87.45+21.569231*dd);
+  u1+=0.473*Math.sin(2*(u1-u2)*RAD);u2+=1.065*Math.sin(2*(u2-u3)*RAD);
+  u3+=0.165*Math.sin(G*RAD);u4+=0.843*Math.sin(H*RAD);
+  const r1=5.9057-0.0244*Math.cos(2*(u1-u2)*RAD),r2=9.3966-0.0882*Math.cos(2*(u2-u3)*RAD),
+        r3=14.9883-0.0216*Math.cos(G*RAD),r4=26.3627-0.1939*Math.cos(H*RAD);
+  const mk=(nm,u,r)=>({nm:nm,x:r*Math.sin(u*RAD),front:Math.cos(u*RAD)<0});
+  return[mk('Io',u1,r1),mk('Europa',u2,r2),mk('Ganymede',u3,r3),mk('Callisto',u4,r4)];
+}
+function saturnRingB(){
+  const pe=planetEq(PLAN.Saturn,GL.dS,GL.sLon,GL.sR);
+  const T=(GL.dS-1.5)/36525;
+  const i=28.075216-0.012998*T,Om=169.508470+1.394681*T;
+  const B=Math.asin(Math.max(-1,Math.min(1,Math.sin(i*RAD)*Math.cos(pe.bet*RAD)*Math.sin((pe.lam-Om)*RAD)-Math.cos(i*RAD)*Math.sin(pe.bet*RAD))))*DEG;
+  return{B:B,pe:pe};
+}
+function renderPlanetDetail(){
+  const el=document.getElementById('planetDetail');if(!el||!GL)return;
+  const dt=new Date(Date.UTC(GL.y,GL.m,GL.d,GL.hh-8,GL.mm,0));
+  const jp=planetEq(PLAN.Jupiter,GL.dS,GL.sLon,GL.sR),ja=altaz(jp.ra,jp.dec);
+  const ms=galilean(dt),sc=5.3,W=320,cy=25;
+  let svg='<svg viewBox="0 0 '+W+' 48" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;margin-top:6px">'
+    +'<rect width="'+W+'" height="48" rx="8" fill="#0a1430"/>'
+    +'<text x="7" y="29" fill="#8ea3d8" font-size="9">E</text><text x="'+(W-13)+'" y="29" fill="#8ea3d8" font-size="9">W</text>'
+    +'<line x1="18" y1="'+cy+'" x2="'+(W-18)+'" y2="'+cy+'" stroke="#22325a" stroke-width="0.6"/>'
+    +'<circle cx="'+(W/2)+'" cy="'+cy+'" r="'+sc+'" fill="#e7c9a0"/><rect x="'+(W/2-sc)+'" y="'+(cy-1.8)+'" width="'+(2*sc)+'" height="1.4" fill="#b98a55"/><rect x="'+(W/2-sc)+'" y="'+(cy+0.6)+'" width="'+(2*sc)+'" height="1.2" fill="#c79b6a"/>';
+  ms.forEach(function(mn){const x=W/2+mn.x*sc;
+    svg+='<circle cx="'+x.toFixed(1)+'" cy="'+cy+'" r="2.2" fill="'+(Math.abs(mn.x)<1?(mn.front?'#ffd34d':'#4a5578'):'#fff')+'"/><text x="'+x.toFixed(1)+'" y="13" fill="#cdd6f0" font-size="8" text-anchor="middle">'+mn.nm[0]+'</text>';});
+  svg+='</svg>';
+  const tr=grsTransitTimes();
+  let html='<div style="margin-top:13px;padding-top:11px;border-top:1px solid var(--line)">'
+    +'<b style="color:var(--gold)">♃ Jupiter in the eyepiece</b> <span class="tsub" style="display:inline">'+(ja.alt>0?Math.round(ja.alt)+'° '+compass(ja.az)+' at '+timeLabel(GL.hh,GL.mm):'below horizon at the chosen time')+'</span>'
+    +svg
+    +'<div class="tsub" style="margin-top:3px">Galilean moons at the chosen time — I&nbsp;Io · E&nbsp;Europa · G&nbsp;Ganymede · C&nbsp;Callisto. Gold&nbsp;dot = crossing the disc (transit), dark&nbsp;dot = behind Jupiter. Sky view; most telescopes flip east–west.</div>'
+    +'<div style="font-size:13px;margin-top:7px">🔴 <b>Great Red Spot</b>: '+(tr.length?'squarely face-on as it crosses Jupiter\'s meridian at <b>'+tr.join('</b> and <b>')+'</b> — well placed for ~50 min either side.':'no meridian crossing between 5 pm and midnight — the moons are the show tonight.')+'</div>';
+  const rb=saturnRingB(),sa2=altaz(rb.pe.ra,rb.pe.dec),ab=Math.abs(rb.B);
+  const rngTxt=ab<3?'nearly <b>edge-on — a razor-thin line</b> even in the 40 cm':(ab<10?'a <b>narrow ellipse</b>, reopening after the 2025 ring-plane crossing':'<b>wide open</b> — the classic showpiece view');
+  html+='<div style="font-size:13px;margin-top:9px"><b style="color:var(--gold)">♄ Saturn</b> <span class="tsub" style="display:inline">'+(sa2.alt>0?Math.round(sa2.alt)+'° '+compass(sa2.az):'below horizon at the chosen time')+'</span> — rings tilted <b>'+rb.B.toFixed(1)+'°</b>: '+rngTxt+'.</div>'
+    +'<div class="tsub" style="margin-top:7px;margin-bottom:0">Computed on-device (Meeus low-precision series). GRS longitude assumed '+Math.round(grsLon(dt))+'° System II (JUPOS trend) — it drifts, so treat times as ±15 min.</div></div>';
+  el.innerHTML=html;
+}
+const DBL=[
+ ["Albireo","Double star","Cygnus",292.68,27.96,"3.1 + 5.1","35″","Gold & sapphire — the classic colour-contrast pair"],
+ ["Epsilon Lyrae","Double-double","Lyra",281.08,39.67,"5.0 + 5.2","2.3″ pairs","Two tight pairs in one field — splits at high power in the 40 cm"],
+ ["Mizar & Alcor","Double star","Ursa Major",200.98,54.93,"2.3 + 4.0","14″ (+12′)","Naked-eye pair; Mizar itself splits in any scope"],
+ ["Alpha Centauri","Double star","Centaurus",219.90,-60.83,"0.0 + 1.3","~7″","Nearest star system — brilliant twin suns"],
+ ["Acrux","Double star","Crux",186.65,-63.10,"1.3 + 1.8","4″","Foot of the Southern Cross — two blue-white diamonds"],
+ ["Antares","Double star","Scorpius",247.35,-26.43,"1.0 + 5.4","2.6″","Red supergiant with a green-tinged companion — a 40 cm challenge"],
+ ["Graffias (β Sco)","Double star","Scorpius",241.36,-19.81,"2.6 + 4.9","13.7″","Bright, easy pair near Antares"],
+ ["Porrima (γ Vir)","Double star","Virgo",190.42,-1.45,"3.5 + 3.5","3.5″","Perfectly matched twins, slowly widening"],
+ ["Castor","Double star","Gemini",113.65,31.89,"1.9 + 3.0","5.5″","Sextuple system; crisp A–B pair in a scope"],
+ ["Rigel","Double star","Orion",78.63,-8.20,"0.1 + 6.8","9.5″","Blazing supergiant with a shy companion in its glare"],
+ ["Almach (γ And)","Double star","Andromeda",30.97,42.33,"2.3 + 5.0","9.6″","Gold & blue — rivals Albireo"],
+ ["Gamma Delphini","Double star","Delphinus",311.66,16.12,"4.3 + 5.1","9″","Golden pair at the dolphin's nose"],
+ ["Beta Monocerotis","Triple star","Monoceros",97.20,-7.03,"4.6+5.0+5.4","7″","Stunning triple — Herschel called it one of the finest in the sky"],
+ ["La Superba (Y CVn)","Carbon star","Canes Venatici",191.28,45.44,"~5.2 var","—","One of the reddest stars visible — deep ruby"],
+ ["Hind's Crimson Star (R Lep)","Carbon star","Lepus",74.98,-14.81,"5.5–11.7 var","—","Glows like a drop of blood, best near maximum"],
+ ["TX Piscium","Carbon star","Pisces",356.61,3.49,"~5.0 var","—","Bright orange-red carbon star"],
+ ["V Aquilae","Carbon star","Aquila",286.10,-5.68,"6.6–8.1 var","—","Deep-red ember in the Milky Way"],
+ ["DY Crucis","Carbon star","Crux",191.83,-59.71,"8.5–9.8 var","—","Ruby spark right beside Mimosa — a 40 cm treat"]
+];
+function renderDoubles(){
+  const c=document.getElementById('doubles');if(!c)return;
+  if(!DARK){c.innerHTML='<div class="tsub">Sky not dark yet — pick an evening time.</div>';return;}
+  const rows=DBL.map(function(t){const a=altaz(t[3],t[4]);return{name:t[0],type:t[1],con:t[2],alt:a.alt,az:a.az,mags:t[5],sep:t[6],note:t[7]};}).filter(function(r){return r.alt>10;}).sort(function(a2,b2){return b2.alt-a2.alt;});
+  if(!rows.length){c.innerHTML='<div class="tsub">None of the catalogued pairs are above 10° at this time.</div>';return;}
+  c.innerHTML=rows.map(function(r){
+    const cls=r.alt>=40?'exc':(r.alt>=20?'good':'low');
+    const v=r.alt>=40?'Prime':(r.alt>=20?'Good':'Low');
+    const carbon=/Carbon/.test(r.type);
+    return '<div class="tcard"><div class="trow1"><div><div class="tname">'+(carbon?'🔴 ':'✨ ')+r.name+'</div><div class="tsub">'+r.type+' · '+r.con+' — '+r.note+'</div></div><span class="tag '+cls+'">'+v+'</span></div>'
+      +'<div class="chips"><span class="chip">⬆ <b>'+Math.round(r.alt)+'°</b></span><span class="chip">'+compass(r.az)+'</span><span class="chip">mags <b>'+r.mags+'</b></span>'+(r.sep!=='—'?'<span class="chip">sep <b>'+r.sep+'</b></span>':'')+'</div></div>';
+  }).join('');
+}
+function findConjunctions(){
+  const out=[];if(!GL)return out;
+  const P5=['Venus','Jupiter','Saturn','Mars','Mercury'];
+  for(let dd2=0;dd2<=21;dd2++){
+    const dt=new Date(Date.UTC(GL.y,GL.m,GL.d+dd2,20-8,30,0));
+    const J=jd(dt),dS=J-2451543.5,lstv=rev(280.46061837+360.98564736629*(J-2451545.0)+LON);
+    const aa=function(ra,dec){const H=(lstv-ra)*RAD,dr=dec*RAD,l=LAT*RAD;return Math.asin(Math.sin(dr)*Math.sin(l)+Math.cos(dr)*Math.cos(l)*Math.cos(H))*DEG;};
+    const s=sun(dS),mo=moon(dS),meq=eclToEq(mo.lon,mo.lat,dS),malt=aa(meq.ra,meq.dec);
+    const bodies={};
+    P5.forEach(function(nm){const pe=planetEq(PLAN[nm],dS,s.lon,s.r);bodies[nm]={ra:pe.ra,dec:pe.dec,alt:aa(pe.ra,pe.dec)};});
+    P5.forEach(function(nm){const b=bodies[nm],sp=angSep(meq.ra,meq.dec,b.ra,b.dec);
+      if(sp<5&&malt>0&&b.alt>5)out.push({dd:dd2,pair:'Moon–'+nm,sep:sp,ic:'🌙'});});
+    for(let i2=0;i2<P5.length;i2++)for(let j3=i2+1;j3<P5.length;j3++){
+      const A=bodies[P5[i2]],B2=bodies[P5[j3]],sp=angSep(A.ra,A.dec,B2.ra,B2.dec);
+      if(sp<2.5&&A.alt>5&&B2.alt>5)out.push({dd:dd2,pair:P5[i2]+'–'+P5[j3],sep:sp,ic:'🪐'});}
+  }
+  const best={};out.forEach(function(c2){const k=c2.pair;if(!best[k]||c2.sep<best[k].sep)best[k]=c2;});
+  return Object.keys(best).map(function(k){return best[k];}).sort(function(a2,b2){return a2.dd-b2.dd;});
+}
+function renderConj(){
+  const el=document.getElementById('conj');if(!el||!GL)return;
+  const cs=findConjunctions();
+  if(!cs.length){el.innerHTML='';return;}
+  el.innerHTML=cs.map(function(c2){
+    const dt=new Date(Date.UTC(GL.y,GL.m,GL.d+c2.dd,12));
+    const when=c2.dd===0?'chosen night':dateLabel(dt.getUTCFullYear(),dt.getUTCMonth(),dt.getUTCDate())+' · in '+c2.dd+' day'+(c2.dd>1?'s':'');
+    return '<div class="evrow"><span class="evic">'+c2.ic+'</span><div><b>'+c2.pair+' — just '+c2.sep.toFixed(1)+'° apart</b> <span class="evwhen">'+when+'</span><div class="evnote">Close pairing in the 8:30 pm sky — a lovely naked-eye / wide-field sight'+(c2.pair.indexOf('Moon')===0?' (Moon position geocentric; allow up to ~1° shift)':'')+'.</div></div></div>';
+  }).join('')+'<div class="tsub" style="margin:2px 0 10px">↑ Pairings computed on-device for 8:30 pm each evening, next 3 weeks.</div>';
+  const tonight=cs.filter(function(c2){return c2.dd===0;})[0];
+  if(tonight)EVT.unshift(['','✨',tonight.pair+' '+tonight.sep.toFixed(1)+'° apart','',1]);
+}
+let RADAT=0;
+function loadRadar(){
+  const el=document.getElementById('radar');if(!el)return;
+  if(Date.now()-RADAT<5*60000)return;RADAT=Date.now();
+  let tries=0;
+  const attempt=function(){
+    if(tries>5){el.style.display='block';el.innerHTML='<div class="wxsrc">Rain radar unavailable right now — <a href="https://www.weather.gov.sg/weather-rain-area-50km/" target="_blank" rel="noopener" style="color:var(--cyan)">open it on weather.gov.sg ↗</a></div>';return;}
+    const t=new Date(Math.floor((Date.now()+8*3600000-(tries*5+2)*60000)/300000)*300000);tries++;
+    const stamp=''+t.getUTCFullYear()+pad(t.getUTCMonth()+1)+pad(t.getUTCDate())+pad(t.getUTCHours())+pad(t.getUTCMinutes());
+    const img=new Image();
+    img.onload=function(){
+      el.style.display='block';
+      el.innerHTML='<div style="border-radius:10px;overflow:hidden;margin-top:11px;background:#0b1526 url(https://www.weather.gov.sg/wp-content/themes/wiptheme/assets/img/base-853.png) center/cover no-repeat">'
+        +'<img src="'+img.src+'" alt="MSS rain radar" style="width:100%;display:block">'
+        +'</div><div class="wxsrc">🛰️ MSS 50-km rain radar · '+timeLabel(t.getUTCHours(),t.getUTCMinutes())+' SGT — live now, so it applies to tonight, not future dates. <a href="https://www.weather.gov.sg/weather-rain-area-50km/" target="_blank" rel="noopener" style="color:var(--cyan)">animated loop ↗</a></div>';
+    };
+    img.onerror=attempt;
+    img.src='https://www.weather.gov.sg/files/rainarea/50km/v2/dpsri_70km_'+stamp+'0000dBR.dpsri.png';
+  };
+  attempt();
+}
 
 function moonRiseSet(y,m,d){
   const H0=0.125,startMs=Date.UTC(y,m,d,0,0,0)-8*3600000,step=5*60000,span=24*3600000;
@@ -912,15 +1233,17 @@ function recompute(y,m,d,hh,mm){
 
   renderTargets();
   GL={y:y,m:m,d:d,hh:hh,mm:mm,dS:dS,sLon:s.lon,sR:s.r,sunAlt:sunAlt};
+  renderExtras();
   renderGlance();
   clearTimeout(WXT);WXT=setTimeout(function(){loadWeather(false);},350);
 }
 
-function tick(){let diff=startUTC-Date.now();const el=document.getElementById('cd');
-  if(diff<=0){el.textContent=diff>-9000000?"now 🔭":"—";return;}
+function tick(){let diff=startUTC-Date.now();const el=document.getElementById('cd'),el2=document.getElementById('cdSlim');
+  const setCd=t=>{if(el)el.textContent=t;if(el2)el2.textContent=t;};
+  if(diff<=0){setCd(diff>-9000000?"now 🔭":"—");return;}
   const dY=Math.floor(diff/86400000);diff-=dY*86400000;const h=Math.floor(diff/3600000);diff-=h*3600000;
   const mi=Math.floor(diff/60000);diff-=mi*60000;const sc=Math.floor(diff/1000);
-  el.textContent=(dY>0?dY+"d ":"")+pad(h)+":"+pad(mi)+":"+pad(sc);}
+  setCd((dY>0?dY+"d ":"")+pad(h)+":"+pad(mi)+":"+pad(sc));}
 
 document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('active',b.dataset.mode===currentMode));
 document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
@@ -1091,6 +1414,225 @@ document.getElementById('wxBtn').addEventListener('click',function(){loadWeather
   document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('.hov');if(el){const r=el.getBoundingClientRect();if(shown&&tip._for===el){hide();}else{show(el,r.left,r.bottom);tip._for=el;}e.stopPropagation();}else hide();});
 })();
 
+// ==== v3.2: special events · ISS passes · haze · session plan · briefing ====
+let EVT=[],ISSCHIP='',ISSFOR='',PSIAT=0;
+const EVENTS=[
+ ['2026-07-28','☄️','Delta Aquariids meteor shower peaks','Up to 20/hr after midnight, but the full Moon washes most out this year.',1],
+ ['2026-08-02','🪐','Mercury at greatest western elongation','Morning object — low in the east before sunrise, not an evening-session target.',1],
+ ['2026-08-12','🌑','Total solar eclipse — not visible from Singapore','Path crosses the Arctic, Greenland, Iceland & Spain.',0],
+ ['2026-08-12','☄️','Perseids meteor shower peaks','Excellent year — New Moon, dark skies. Up to 60/hr after midnight; the radiant sits low in the north from Singapore, so rates are reduced but bright ones still get through.',1],
+ ['2026-08-15','🪐','Venus at greatest eastern elongation','Brilliant "evening star" in the west after sunset — a session showpiece.',1],
+ ['2026-08-28','🌕','Partial lunar eclipse — not visible from Singapore','Visible from the Americas, Europe & Africa.',0],
+ ['2026-09-25','🪐','Neptune at opposition','Closest & brightest of the year — a tiny blue dot for the 40 cm.',1],
+ ['2026-10-04','🪐','Saturn at opposition','Closest & brightest of the year, up all night — prime target for every scope on deck.',1],
+ ['2026-10-07','☄️','Draconids meteor shower peaks','Minor (~10/hr) early-evening shower, but the radiant is very low from Singapore.',1],
+ ['2026-10-12','🪐','Mercury at greatest eastern elongation','Best evening view — very low in the west just after sunset.',1],
+ ['2026-10-21','☄️','Orionids meteor shower peaks','Up to 20/hr from Halley\'s dust; Moon sets after midnight and the radiant is well placed from Singapore.',1],
+ ['2026-11-04','☄️','Taurids meteor shower peaks','Slow, bright fireballs, ~5–10/hr, best after midnight.',1],
+ ['2026-11-17','☄️','Leonids meteor shower peaks','Up to 15/hr after the Moon sets around midnight.',1],
+ ['2026-11-24','🌕','Full Moon — supermoon','Slightly bigger & brighter than usual — great on the deck scopes, bad for faint targets.',1],
+ ['2026-11-25','🪐','Uranus at opposition','Closest & brightest of the year — blue-green dot in the bigger scopes.',1],
+ ['2026-12-13','☄️','Geminids meteor shower peaks','King of the showers — up to 120/hr and the crescent Moon sets early. Radiant climbs from ~9 pm in Singapore; an excellent year.',1],
+ ['2026-12-21','☄️','Ursids meteor shower peaks','Far-northern radiant sits on/below Singapore\'s horizon — effectively not observable here.',0],
+ ['2026-12-23','🌕','Full Moon — supermoon','Slightly bigger & brighter than usual.',1],
+ ['2027-01-03','☄️','Quadrantids meteor shower peaks','Up to 40/hr after midnight; little moonlight, but the radiant stays very low from Singapore.',1],
+ ['2027-01-03','🪐','Venus at greatest western elongation','Brilliant "morning star" before sunrise.',1],
+ ['2027-01-22','🌕','Full Moon — supermoon','Slightly bigger & brighter than usual.',1],
+ ['2027-02-03','🪐','Mercury at greatest eastern elongation','Low in the west just after sunset.',1],
+ ['2027-02-06','🌑','Annular solar eclipse — not visible from Singapore','Path crosses the south Pacific, Chile & Argentina.',0],
+ ['2027-02-10','🪐','Jupiter at opposition','Closest & brightest of the year, up all night — cloud belts & the four Galilean moons in any scope.',1],
+ ['2027-02-19','🪐','Mars at opposition','Closest & brightest of the year — surface markings in the 40 cm.',1],
+ ['2027-02-20','🌕','Penumbral lunar eclipse — not visible from Singapore','Subtle shading, visible from the Americas, Europe, Africa & western Asia. Also a supermoon.',0],
+ ['2027-04-22','☄️','Lyrids meteor shower peaks','~20/hr, but a nearly-full Moon washes most out this year.',1],
+ ['2027-05-06','☄️','Eta Aquariids meteor shower peaks','Excellent year — no Moon. Up to 60/hr before dawn from Halley\'s dust; one of the best showers for Singapore\'s latitude.',1],
+ ['2027-05-28','🪐','Mercury at greatest eastern elongation','Low in the west just after sunset.',1],
+ ['2027-07-15','🪐','Mercury at greatest western elongation','Morning object before sunrise.',1],
+ ['2027-07-18','🌕','Penumbral lunar eclipse — visible from Singapore','Subtle darkening of the full Moon; visible across Southeast Asia & Australia.',1],
+ ['2027-07-28','☄️','Delta Aquariids meteor shower peaks','~20/hr after midnight; waning crescent Moon — a decent year.',1],
+ ['2027-08-02','🌑','Total solar eclipse — not visible from Singapore','Path crosses North Africa & the Middle East; partial from Europe to India.',0],
+ ['2027-08-12','☄️','Perseids meteor shower peaks','Waxing gibbous Moon interferes; radiant low from Singapore.',1],
+ ['2027-09-24','🪐','Mercury at greatest eastern elongation','Best evening apparition of the year (26° from the Sun), low in the west after sunset.',1],
+ ['2027-09-28','🪐','Neptune at opposition','Tiny blue dot at its brightest for the year.',1],
+ ['2027-10-07','☄️','Draconids meteor shower peaks','Minor early-evening shower; radiant very low from Singapore.',1],
+ ['2027-10-18','🪐','Saturn at opposition','Closest & brightest of the year — rings on show all night.',1],
+ ['2027-10-21','☄️','Orionids meteor shower peaks','~20/hr after midnight; some moonlight interferes.',1],
+ ['2027-11-04','☄️','Taurids meteor shower peaks','Slow bright fireballs, ~5–10/hr after midnight.',1],
+ ['2027-11-17','☄️','Leonids meteor shower peaks','Near-full Moon spoils all but the brightest this year.',1],
+ ['2027-11-30','🪐','Uranus at opposition','Blue-green dot at its brightest for the year.',1],
+ ['2027-12-13','☄️','Geminids meteor shower peaks','Up to 120/hr, but a full Moon hurts this year.',1]
+];
+function renderEvents(){
+  const el=document.getElementById('events');if(!el||!GL)return;
+  const cur=Date.UTC(GL.y,GL.m,GL.d);let html='';EVT=[];
+  EVENTS.forEach(ev=>{const p=ev[0].split('-').map(Number),t=Date.UTC(p[0],p[1]-1,p[2]);
+    const dd=Math.round((t-cur)/86400000);if(dd<0||dd>21)return;
+    if(dd===0&&ev[4])EVT.push(ev);
+    const when=dd===0?'chosen night':(dd===1?'next night':dateLabel(p[0],p[1]-1,p[2])+' · in '+dd+' days');
+    html+='<div class="evrow'+(ev[4]?'':' dim')+'"><span class="evic">'+ev[1]+'</span><div><b>'+ev[2]+'</b> <span class="evwhen">'+when+'</span><div class="evnote">'+ev[3]+'</div></div></div>';});
+  el.innerHTML=html||'<div class="tsub">No major sky events in the 3 weeks after the chosen date — pick a later date to look further ahead.</div>';
+}
+function skyAt(hh,mm){
+  const dt=new Date(Date.UTC(GL.y,GL.m,GL.d,hh-8,mm,0));
+  const J=jd(dt),dS=J-2451543.5;
+  const lstv=rev(280.46061837+360.98564736629*(J-2451545.0)+LON);
+  const aa=(ra,dec)=>{const H=(lstv-ra)*RAD,dr=dec*RAD,l=LAT*RAD;
+    const alt=Math.asin(Math.sin(dr)*Math.sin(l)+Math.cos(dr)*Math.cos(l)*Math.cos(H))*DEG;
+    let az=Math.atan2(-Math.cos(dr)*Math.sin(H),Math.sin(dr)*Math.cos(l)-Math.cos(dr)*Math.sin(l)*Math.cos(H))*DEG;
+    return{alt,az:rev(az)};};
+  const s=sun(dS),seq=eclToEq(s.lon,0,dS),sa=aa(seq.ra,seq.dec).alt;
+  const mo=moon(dS),meq=eclToEq(mo.lon,mo.lat,dS),ma=aa(meq.ra,meq.dec);
+  const pls=[];for(const nm of Object.keys(PLAN)){const pe=planetEq(PLAN[nm],dS,s.lon,s.r);const a2=aa(pe.ra,pe.dec);pls.push({name:nm,alt:a2.alt,az:a2.az,mag:pe.mag});}
+  const tg=CAT.map(t=>{const a2=aa(t[3],t[4]);return{name:t[0],type:t[1],alt:a2.alt,az:a2.az,cls:t[5],mag:t[6]};}).filter(r=>r.alt>15).sort((a2,b2)=>b2.alt-a2.alt);
+  return{sunAlt:sa,moonAlt:ma.alt,moonAz:ma.az,planets:pls,targets:tg};
+}
+function renderPlan(){
+  const el=document.getElementById('plan');if(!el||!GL)return;
+  let html='';
+  [[19,30],[20,30],[21,30]].forEach(sl=>{
+    const sk=skyAt(sl[0],sl[1]);const rows=[];
+    if(sk.sunAlt>-6)rows.push('Sky still bright — welcome & orientation talk'+(sk.moonAlt>10?'; the Moon is already up, start the deck queues on it':'')+'.');
+    if(sk.moonAlt>10)rows.push('🌙 <b>Moon</b> ('+Math.round(sk.moonAlt)+'° '+compass(sk.moonAz)+') — deck <b>Celestron CPC / C6</b>: fast, queue-friendly views of the terminator.');
+    const vis=sk.planets.filter(p=>p.alt>12&&['Venus','Mars','Jupiter','Saturn','Mercury'].indexOf(p.name)>=0&&sk.sunAlt<-3).sort((a2,b2)=>a2.mag-b2.mag);
+    if(vis[0])rows.push('🪐 <b>'+vis[0].name+'</b> ('+Math.round(vis[0].alt)+'° '+compass(vis[0].az)+') — <b>40 cm main dome</b> for maximum detail; overflow on the 11&quot;.');
+    if(vis[1])rows.push('🪐 <b>'+vis[1].name+'</b> ('+Math.round(vis[1].alt)+'° '+compass(vis[1].az)+') — <b>11&quot; second dome</b>.');
+    if(sk.sunAlt<-12){
+      const glob=sk.targets.find(t=>/Globular/i.test(t.type)&&t.alt>25);
+      if(glob)rows.push('✨ <b>'+glob.name+'</b> ('+Math.round(glob.alt)+'°) — <b>40 cm</b> resolves the core; crisp in the <b>6&quot; apo</b>.');
+      const oc=sk.targets.find(t=>/Open cluster/i.test(t.type)&&t.alt>25&&t.mag!=null&&t.mag<6.5);
+      if(oc)rows.push('✨ <b>'+oc.name+'</b> ('+Math.round(oc.alt)+'°) — wide-field in the <b>6&quot; apo</b> / portable scopes.');
+      const em=sk.targets.find(t=>t.cls==='emission'&&t.alt>25);
+      if(em)rows.push('📷 <b>'+em.name+'</b> ('+Math.round(em.alt)+'°) — <b>Seestar S30 Pro</b> dual-band imaging'+(pct>=55?' (the Hα/OIII filter beats the moonlight)':'')+'.');
+    }
+    if(!rows.length)rows.push('Nothing well placed yet — sky tour & constellation talk.');
+    html+='<div class="planslot"><h3>'+timeLabel(sl[0],sl[1])+'</h3><ul>'+rows.map(r=>'<li>'+r+'</li>').join('')+'</ul></div>';
+  });
+  el.innerHTML=html+'<div class="tsub" style="margin-top:6px">Auto-generated from computed altitudes & the SCOB fleet for the chosen date — adjust on the night.</div>';
+}
+function loadScript(src){return new Promise((res,rej)=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});}
+const SATS=[
+ {nm:'ISS',cat:25544,note:'Naked-eye — a brilliant "star" gliding across the sky in a few minutes.'},
+ {nm:'Tiangong',cat:48274,note:'China\'s space station — nearly as bright as the ISS, same graceful glide.'},
+ {nm:'Hubble',cat:20580,note:'The Hubble Space Telescope — fainter (mag ~2–3); easiest in binoculars.'}
+];
+async function getTLE(cat){
+  const key='scobTLE_'+cat;
+  let cached=null;try{cached=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
+  if(cached&&Date.now()-cached.ts<3*86400000)return cached;
+  try{
+    const r=await fetch('https://celestrak.org/NORAD/elements/gp.php?CATNR='+cat+'&FORMAT=TLE',{cache:'no-store'});
+    if(!r.ok)throw 0;
+    const L=(await r.text()).trim().split(/\r?\n/);
+    if(L.length<3)throw 0;
+    const c={l1:L[1].trim(),l2:L[2].trim(),ts:Date.now()};
+    try{localStorage.setItem(key,JSON.stringify(c));}catch(e){}
+    return c;
+  }catch(e){return cached;}
+}
+function issSunlit(pos,dt){const dS=jd(dt)-2451543.5,s=sun(dS),eq=eclToEq(s.lon,0,dS);
+  const ra=eq.ra*RAD,dec=eq.dec*RAD;
+  const sv=[Math.cos(dec)*Math.cos(ra),Math.cos(dec)*Math.sin(ra),Math.sin(dec)];
+  const dot=pos.x*sv[0]+pos.y*sv[1]+pos.z*sv[2];
+  if(dot>0)return true;
+  const r2=pos.x*pos.x+pos.y*pos.y+pos.z*pos.z;
+  return Math.sqrt(Math.max(0,r2-dot*dot))>6371;}
+async function loadISS(){
+  const box=document.getElementById('iss');if(!box||!GL)return;
+  const key=GL.y+'-'+pad(GL.m+1)+'-'+pad(GL.d);
+  if(ISSFOR===key)return;ISSFOR=key;ISSCHIP='';
+  box.innerHTML='<div class="tsub">Computing evening passes…</div>';
+  try{
+    if(typeof satellite==='undefined')await loadScript('https://cdnjs.cloudflare.com/ajax/libs/satellite.js/5.0.0/satellite.min.js');
+    const obs={latitude:LAT*RAD,longitude:LON*RAD,height:0.02};
+    const base=Date.UTC(GL.y,GL.m,GL.d,0,0,0)-8*3600000;
+    const all=[];let maxAge=0,got=0;
+    for(const st of SATS){
+      const tle=await getTLE(st.cat);if(!tle)continue;got++;
+      maxAge=Math.max(maxAge,Math.round((Date.now()-tle.ts)/86400000));
+      const rec=satellite.twoline2satrec(tle.l1,tle.l2);
+      let cur=null;
+      for(let sec=19*3600;sec<=23*3600;sec+=10){
+        const dt=new Date(base+sec*1000);
+        const pv=satellite.propagate(rec,dt);if(!pv||!pv.position)continue;
+        const la=satellite.ecfToLookAngles(obs,satellite.eciToEcf(pv.position,satellite.gstime(dt)));
+        const elv=la.elevation*DEG;
+        if(elv>10){
+          const vis=sunAltAt(dt)<-6&&issSunlit(pv.position,dt);
+          if(!cur)cur={sat:st,s:dt,sAz:la.azimuth*DEG,maxEl:elv,maxAz:la.azimuth*DEG,maxT:dt,vis:vis,e:dt,eAz:la.azimuth*DEG};
+          else{if(elv>cur.maxEl){cur.maxEl=elv;cur.maxAz=la.azimuth*DEG;cur.maxT=dt;}cur.vis=cur.vis||vis;}
+          cur.e=dt;cur.eAz=la.azimuth*DEG;
+        }else if(cur){all.push(cur);cur=null;}
+      }
+      if(cur)all.push(cur);
+    }
+    if(!got)throw 0;
+    all.sort((a2,b2)=>a2.s-b2.s);
+    const fmt=dt=>{const t=new Date(dt.getTime()+8*3600000);return timeLabel(t.getUTCHours(),t.getUTCMinutes());};
+    if(!all.length){box.innerHTML='<div class="tsub">No ISS, Tiangong or Hubble passes above 10° between 7 pm and 11 pm this night.</div>';}
+    else{
+      box.innerHTML=all.map(p=>{
+        const tag=p.vis?'<span class="tag exc">visible</span>':'<span class="tag below">in Earth\'s shadow</span>';
+        return '<div class="evrow"><span class="evic">🛰️</span><div><b>'+p.sat.nm+' · '+fmt(p.s)+' → '+fmt(p.e)+'</b> '+tag+'<div class="evnote">Rises '+compass(p.sAz)+', peaks <b>'+Math.round(p.maxEl)+'°</b> in the '+compass(p.maxAz)+' at '+fmt(p.maxT)+', sets '+compass(p.eAz)+'. '+p.sat.note+'</div></div></div>';
+      }).join('')+'<div class="tsub" style="margin-top:6px">ISS · Tiangong · Hubble — computed on-device from CelesTrak orbital elements ('+(maxAge<1?'fetched today':'up to '+maxAge+' days old')+'). Times drift as orbits are adjusted — accurate within a few days of the TLE.</div>';
+      const best=all.filter(p=>p.vis).sort((a2,b2)=>b2.maxEl-a2.maxEl)[0];
+      if(best){ISSCHIP=best.sat.nm+' '+fmt(best.s)+' · '+Math.round(best.maxEl)+'°';renderGlance();}
+    }
+  }catch(e){box.innerHTML='<div class="tsub">⚠️ Needs a connection once to fetch satellite orbits from CelesTrak — try again when online.</div>';ISSFOR='';}
+}
+async function loadPSI(){
+  const el=document.getElementById('haze');if(!el)return;
+  if(Date.now()-PSIAT<15*60000)return;
+  try{
+    const r=await fetch('https://api.data.gov.sg/v1/environment/psi',{cache:'no-store'});
+    const j=await r.json();const it=j.items&&j.items[0];if(!it)throw 0;
+    const psi=it.readings.psi_twenty_four_hourly.west;
+    PSIAT=Date.now();
+    let band='Good',cls='ok',note='no haze penalty on transparency.';
+    if(psi>100){band='Unhealthy';cls='bad';note='haze will noticeably dim stars and kill faint targets.';}
+    else if(psi>50){band='Moderate';cls='warn';note='slight loss of transparency on faint fuzzies.';}
+    el.style.display='block';
+    el.innerHTML='🌫️ <b>Haze right now (West):</b> 24-h PSI <b class="'+cls+'">'+psi+' · '+band+'</b> — '+note+' <span style="opacity:.75">Live NEA reading — applies to tonight, not to future dates.</span>';
+  }catch(e){}
+}
+function buildBriefing(){
+  if(!GL)return;const q=id=>{const e2=document.getElementById(id);return e2?e2.textContent.trim():'';};
+  const y=GL.y,m=GL.m,d=GL.d,hh=GL.hh,mm=GL.mm,st=sunTimes(y,m,d);
+  let planets='';document.querySelectorAll('#solar .srow').forEach(r=>{
+    const c1=r.querySelector('.snm'),c2=r.querySelector('.sval'),c3=r.querySelector('.smag'),c4=r.querySelector('.tag');
+    planets+='<tr><td>'+(c1?c1.textContent:'')+'</td><td>'+(c2?c2.textContent:'')+'</td><td>'+(c3?c3.textContent:'')+'</td><td>'+(c4?c4.textContent:'')+'</td></tr>';});
+  let targs='',n=0;
+  document.querySelectorAll('#targets .tcard').forEach(t=>{if(n>=10)return;n++;
+    targs+='<tr><td>'+t.querySelector('.tname').textContent+'</td><td>'+t.querySelector('.tsub').textContent+'</td><td>'+(t.querySelector('.tag')?t.querySelector('.tag').textContent:'')+'</td><td>'+Array.prototype.map.call(t.querySelectorAll('.chip'),c=>c.textContent).join(' · ')+'</td></tr>';});
+  let dbls='';document.querySelectorAll('#doubles .tcard').forEach(t=>{
+    dbls+='<tr><td>'+t.querySelector('.tname').textContent+'</td><td>'+(t.querySelector('.tag')?t.querySelector('.tag').textContent:'')+'</td><td>'+Array.prototype.map.call(t.querySelectorAll('.chip'),c=>c.textContent).join(' · ')+'</td></tr>';});
+  const gv=document.querySelector('#glance .gv');
+  const part=id=>{const e2=document.getElementById(id);return e2?e2.innerHTML:'';};
+  document.getElementById('briefing').innerHTML=
+    '<h1>🔭 SCOB Night-Sky Briefing</h1>'
+    +'<div class="sub">Science Centre Observatory, Jurong · <b>'+dateLabel(y,m,d)+'</b> · session 7:30–10:00 pm SGT · positions shown for '+timeLabel(hh,mm)+'</div>'
+    +'<h2>Tonight at a glance</h2><p>'+(gv?gv.textContent:'—')+'<br>🌇 Sunset <b>'+(st.set||'—')+'</b> · 🌌 Fully dark <b>'+(st.dark||'—')+'</b> · 🌅 Sunrise <b>'+(st.rise||'—')+'</b></p>'
+    +'<h2>Weather</h2><p>'+q('weatherNote')+'</p>'+(q('haze')?'<p>'+q('haze')+'</p>':'')
+    +'<h2>Moon</h2><p><b>'+q('moonPct')+' lit — '+q('moonName')+'</b> · '+q('moonRS')+'<br>'+q('moonNote')+'</p>'
+    +'<h2>Solar system at '+timeLabel(hh,mm)+'</h2><table><tr><th>Object</th><th>Alt · direction</th><th>Mag</th><th>Verdict</th></tr>'+planets+'</table>'
+    +'<h2>Jupiter &amp; Saturn in the eyepiece</h2>'+part('planetDetail')
+    +'<h2>Top deep-sky targets ('+(currentMode==='seestar'?'Seestar S30 imaging':'visual')+')</h2>'+(targs?'<table><tr><th>Target</th><th>Type</th><th>Verdict</th><th>Alt · dir · mag · Moon sep</th></tr>'+targs+'</table>':'<p>Sky not dark at the chosen time — pick an evening time first.</p>')
+    +(dbls?'<h2>Double &amp; carbon stars — moon-proof</h2><table><tr><th>Star</th><th>Verdict</th><th>Alt · dir · mags · sep</th></tr>'+dbls+'</table>':'')
+    +'<h2>Conjunctions &amp; special events — next 3 weeks</h2>'+part('conj')+part('events')
+    +'<h2>Satellite passes — ISS · Tiangong · Hubble (7–11 pm)</h2>'+part('iss')
+    +'<h2>Suggested session run-sheet</h2>'+part('plan')
+    +'<div class="src">Sources: deep-sky catalogue — AstroPixels Messier &amp; Caldwell catalogs (F. Espenak) · planetary orbital elements — P. Schlyter · Jupiter/Saturn physical ephemeris — J. Meeus, Astronomical Algorithms · GRS longitude — JUPOS trend · double/carbon star data — WDS &amp; SIMBAD (compiled) · weather &amp; rain radar — Open-Meteo &amp; MSS weather.gov.sg · haze — NEA via data.gov.sg · sky events — Sea &amp; Sky astronomy calendar (seasky.org) · ISS/Tiangong/Hubble orbits — CelesTrak TLEs, propagated on-device with satellite.js · Science Centre Observatory, Singapore.</div>';
+}
+(function(){
+  const bBtn=document.getElementById('briefBtn'),bW=document.getElementById('briefWrap');
+  if(bBtn&&bW){
+    bBtn.addEventListener('click',()=>{buildBriefing();bW.style.display='block';document.body.classList.add('briefing-open');});
+    document.getElementById('briefClose').addEventListener('click',()=>{bW.style.display='none';document.body.classList.remove('briefing-open');});
+    document.getElementById('briefPrint').addEventListener('click',()=>window.print());
+  }
+  const wb=document.getElementById('wxBtn');if(wb)wb.addEventListener('click',()=>{PSIAT=0;loadPSI();RADAT=0;loadRadar();});
+})();
+function renderExtras(){renderEvents();renderConj();renderPlanetDetail();renderDoubles();renderPlan();loadISS();}
+loadPSI();loadRadar();
+
 const f0=nextFridayYMD();
 recompute(f0.y,f0.m,f0.d,20,30);
 tick();setInterval(tick,1000);
@@ -1147,7 +1689,8 @@ function planetEq(p,d,sLon,sR){const g=arr=>arr[0]+arr[1]*d;
   const R=Math.sqrt(xg*xg+yg*yg+zg*zg);
   let FV=Math.acos(Math.max(-1,Math.min(1,(r*r+R*R-sR*sR)/(2*r*R))))*DEG;
   let mag=p.b+5*Math.log10(r*R)+p.c*FV; if(p===PLAN.Venus)mag+=4.2e-7*FV*FV*FV;
-  return{ra:rev(Math.atan2(ye,xe)*DEG),dec:Math.atan2(ze,Math.sqrt(xe*xe+ye*ye))*DEG,mag};}
+  return{ra:rev(Math.atan2(ye,xe)*DEG),dec:Math.atan2(ze,Math.sqrt(xe*xe+ye*ye))*DEG,mag,
+    lam:rev(Math.atan2(yg,xg)*DEG),bet:Math.atan2(zg,Math.sqrt(xg*xg+yg*yg))*DEG};}
 
 let LST=0, MOONEQ={ra:0,dec:0}, pct=0, illum=0, waxing=true, startUTC=0;
 let WXNOTE="";
@@ -1198,6 +1741,8 @@ function renderGlance(){
     +'<span class="gc">🌙 Moon <b>'+pct+'% · '+(ma.alt>0?'up '+Math.round(ma.alt)+'°':'down')+'</b></span>'
     +(bp?'<span class="gc">🪐 Best planet <b>'+bp+'</b></span>':'')
     +(tt?'<span class="gc">🔭 Top target <b>'+tt+'</b></span>':'')
+    +(EVT.length?'<span class="gc">'+EVT[0][1]+' <b>'+EVT[0][2]+'</b></span>':'')
+    +(ISSCHIP?'<span class="gc">🛰️ Best pass <b>'+ISSCHIP+'</b></span>':'')
     +'<span class="gc">🌅 Sunrise <b>'+(st.rise||'—')+'</b></span>'
     +'</div>';
 }
@@ -1462,6 +2007,164 @@ function renderTargets(){
     ?`📷 <b style="color:var(--cyan)">Seestar S30 Pro</b> · 2 h of 30 s subs. Emission & planetary nebulae score as imageable through the dual-band Hα/OIII filter even under this ${pct}% Moon; galaxies stay Moon-limited; single stars hidden. Moon = distance from the Moon. ${shownNote}`
     :`👁 <b style="color:var(--gold)">Visual</b> · eyepiece views. Faint nebulae & galaxies flagged washed-out when the Moon is &gt;55% lit. Moon = distance from the Moon. ${shownNote}`;}
 
+// ==== v3.3: Jupiter/Saturn eyepiece detail · double & carbon stars · conjunctions · rain radar ====
+function angSep(ra1,dec1,ra2,dec2){const a=Math.sin(dec1*RAD)*Math.sin(dec2*RAD)+Math.cos(dec1*RAD)*Math.cos(dec2*RAD)*Math.cos((ra1-ra2)*RAD);return Math.acos(Math.max(-1,Math.min(1,a)))*DEG;}
+function jovePhys(dt){ // Meeus, Astronomical Algorithms ch. 43/44 low-accuracy physical ephemeris
+  const d=jd(dt)-2451545.0;
+  const V=rev(172.74+0.00111588*d),M=rev(357.529+0.9856003*d);
+  const N=rev(20.020+0.0830853*d+0.329*Math.sin(V*RAD));
+  const J2=rev(66.115+0.9025179*d-0.329*Math.sin(V*RAD));
+  const A=1.915*Math.sin(M*RAD)+0.020*Math.sin(2*M*RAD);
+  const B=5.555*Math.sin(N*RAD)+0.168*Math.sin(2*N*RAD);
+  const K=J2+A-B;
+  const Re=1.00014-0.01671*Math.cos(M*RAD)-0.00014*Math.cos(2*M*RAD);
+  const rj=5.20872-0.25208*Math.cos(N*RAD)-0.00611*Math.cos(2*N*RAD);
+  const Dj=Math.sqrt(rj*rj+Re*Re-2*rj*Re*Math.cos(K*RAD));
+  const psi=Math.asin(Math.max(-1,Math.min(1,Re/Dj*Math.sin(K*RAD))))*DEG;
+  const dd=d-Dj/173;
+  return{dd:dd,psi:psi,B:B,w2:rev(187.23+870.1869088*dd+psi-B)};
+}
+function grsLon(dt){return rev(91+1.75*((jd(dt)-2461192.5)/30.44));} // 91° System II on 1 Jun 2026 (JUPOS trend), drifting ~1.75°/month
+function grsTransitTimes(){
+  const out=[];if(!GL)return out;let prev=null;
+  for(let min=17*60;min<=24*60;min+=2){
+    const dt=new Date(Date.UTC(GL.y,GL.m,GL.d,Math.floor(min/60)-8,min%60,0));
+    const diff=((grsLon(dt)-jovePhys(dt).w2+540)%360)-180;
+    if(prev!==null&&prev>0&&diff<=0)out.push(timeLabel(Math.floor(min/60)%24,min%60));
+    prev=diff;
+  }
+  return out;
+}
+function galilean(dt){
+  const p=jovePhys(dt),dd=p.dd,corr=p.psi-p.B;
+  let u1=rev(163.8069+203.4058646*dd+corr),u2=rev(358.4140+101.2916335*dd+corr),
+      u3=rev(5.7176+50.2345180*dd+corr),u4=rev(224.8092+21.4879800*dd+corr);
+  const G=rev(331.18+50.310482*dd),H=rev(87.45+21.569231*dd);
+  u1+=0.473*Math.sin(2*(u1-u2)*RAD);u2+=1.065*Math.sin(2*(u2-u3)*RAD);
+  u3+=0.165*Math.sin(G*RAD);u4+=0.843*Math.sin(H*RAD);
+  const r1=5.9057-0.0244*Math.cos(2*(u1-u2)*RAD),r2=9.3966-0.0882*Math.cos(2*(u2-u3)*RAD),
+        r3=14.9883-0.0216*Math.cos(G*RAD),r4=26.3627-0.1939*Math.cos(H*RAD);
+  const mk=(nm,u,r)=>({nm:nm,x:r*Math.sin(u*RAD),front:Math.cos(u*RAD)<0});
+  return[mk('Io',u1,r1),mk('Europa',u2,r2),mk('Ganymede',u3,r3),mk('Callisto',u4,r4)];
+}
+function saturnRingB(){
+  const pe=planetEq(PLAN.Saturn,GL.dS,GL.sLon,GL.sR);
+  const T=(GL.dS-1.5)/36525;
+  const i=28.075216-0.012998*T,Om=169.508470+1.394681*T;
+  const B=Math.asin(Math.max(-1,Math.min(1,Math.sin(i*RAD)*Math.cos(pe.bet*RAD)*Math.sin((pe.lam-Om)*RAD)-Math.cos(i*RAD)*Math.sin(pe.bet*RAD))))*DEG;
+  return{B:B,pe:pe};
+}
+function renderPlanetDetail(){
+  const el=document.getElementById('planetDetail');if(!el||!GL)return;
+  const dt=new Date(Date.UTC(GL.y,GL.m,GL.d,GL.hh-8,GL.mm,0));
+  const jp=planetEq(PLAN.Jupiter,GL.dS,GL.sLon,GL.sR),ja=altaz(jp.ra,jp.dec);
+  const ms=galilean(dt),sc=5.3,W=320,cy=25;
+  let svg='<svg viewBox="0 0 '+W+' 48" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:460px;margin-top:6px">'
+    +'<rect width="'+W+'" height="48" rx="8" fill="#0a1430"/>'
+    +'<text x="7" y="29" fill="#8ea3d8" font-size="9">E</text><text x="'+(W-13)+'" y="29" fill="#8ea3d8" font-size="9">W</text>'
+    +'<line x1="18" y1="'+cy+'" x2="'+(W-18)+'" y2="'+cy+'" stroke="#22325a" stroke-width="0.6"/>'
+    +'<circle cx="'+(W/2)+'" cy="'+cy+'" r="'+sc+'" fill="#e7c9a0"/><rect x="'+(W/2-sc)+'" y="'+(cy-1.8)+'" width="'+(2*sc)+'" height="1.4" fill="#b98a55"/><rect x="'+(W/2-sc)+'" y="'+(cy+0.6)+'" width="'+(2*sc)+'" height="1.2" fill="#c79b6a"/>';
+  ms.forEach(function(mn){const x=W/2+mn.x*sc;
+    svg+='<circle cx="'+x.toFixed(1)+'" cy="'+cy+'" r="2.2" fill="'+(Math.abs(mn.x)<1?(mn.front?'#ffd34d':'#4a5578'):'#fff')+'"/><text x="'+x.toFixed(1)+'" y="13" fill="#cdd6f0" font-size="8" text-anchor="middle">'+mn.nm[0]+'</text>';});
+  svg+='</svg>';
+  const tr=grsTransitTimes();
+  let html='<div style="margin-top:13px;padding-top:11px;border-top:1px solid var(--line)">'
+    +'<b style="color:var(--gold)">♃ Jupiter in the eyepiece</b> <span class="tsub" style="display:inline">'+(ja.alt>0?Math.round(ja.alt)+'° '+compass(ja.az)+' at '+timeLabel(GL.hh,GL.mm):'below horizon at the chosen time')+'</span>'
+    +svg
+    +'<div class="tsub" style="margin-top:3px">Galilean moons at the chosen time — I&nbsp;Io · E&nbsp;Europa · G&nbsp;Ganymede · C&nbsp;Callisto. Gold&nbsp;dot = crossing the disc (transit), dark&nbsp;dot = behind Jupiter. Sky view; most telescopes flip east–west.</div>'
+    +'<div style="font-size:13px;margin-top:7px">🔴 <b>Great Red Spot</b>: '+(tr.length?'squarely face-on as it crosses Jupiter\'s meridian at <b>'+tr.join('</b> and <b>')+'</b> — well placed for ~50 min either side.':'no meridian crossing between 5 pm and midnight — the moons are the show tonight.')+'</div>';
+  const rb=saturnRingB(),sa2=altaz(rb.pe.ra,rb.pe.dec),ab=Math.abs(rb.B);
+  const rngTxt=ab<3?'nearly <b>edge-on — a razor-thin line</b> even in the 40 cm':(ab<10?'a <b>narrow ellipse</b>, reopening after the 2025 ring-plane crossing':'<b>wide open</b> — the classic showpiece view');
+  html+='<div style="font-size:13px;margin-top:9px"><b style="color:var(--gold)">♄ Saturn</b> <span class="tsub" style="display:inline">'+(sa2.alt>0?Math.round(sa2.alt)+'° '+compass(sa2.az):'below horizon at the chosen time')+'</span> — rings tilted <b>'+rb.B.toFixed(1)+'°</b>: '+rngTxt+'.</div>'
+    +'<div class="tsub" style="margin-top:7px;margin-bottom:0">Computed on-device (Meeus low-precision series). GRS longitude assumed '+Math.round(grsLon(dt))+'° System II (JUPOS trend) — it drifts, so treat times as ±15 min.</div></div>';
+  el.innerHTML=html;
+}
+const DBL=[
+ ["Albireo","Double star","Cygnus",292.68,27.96,"3.1 + 5.1","35″","Gold & sapphire — the classic colour-contrast pair"],
+ ["Epsilon Lyrae","Double-double","Lyra",281.08,39.67,"5.0 + 5.2","2.3″ pairs","Two tight pairs in one field — splits at high power in the 40 cm"],
+ ["Mizar & Alcor","Double star","Ursa Major",200.98,54.93,"2.3 + 4.0","14″ (+12′)","Naked-eye pair; Mizar itself splits in any scope"],
+ ["Alpha Centauri","Double star","Centaurus",219.90,-60.83,"0.0 + 1.3","~7″","Nearest star system — brilliant twin suns"],
+ ["Acrux","Double star","Crux",186.65,-63.10,"1.3 + 1.8","4″","Foot of the Southern Cross — two blue-white diamonds"],
+ ["Antares","Double star","Scorpius",247.35,-26.43,"1.0 + 5.4","2.6″","Red supergiant with a green-tinged companion — a 40 cm challenge"],
+ ["Graffias (β Sco)","Double star","Scorpius",241.36,-19.81,"2.6 + 4.9","13.7″","Bright, easy pair near Antares"],
+ ["Porrima (γ Vir)","Double star","Virgo",190.42,-1.45,"3.5 + 3.5","3.5″","Perfectly matched twins, slowly widening"],
+ ["Castor","Double star","Gemini",113.65,31.89,"1.9 + 3.0","5.5″","Sextuple system; crisp A–B pair in a scope"],
+ ["Rigel","Double star","Orion",78.63,-8.20,"0.1 + 6.8","9.5″","Blazing supergiant with a shy companion in its glare"],
+ ["Almach (γ And)","Double star","Andromeda",30.97,42.33,"2.3 + 5.0","9.6″","Gold & blue — rivals Albireo"],
+ ["Gamma Delphini","Double star","Delphinus",311.66,16.12,"4.3 + 5.1","9″","Golden pair at the dolphin's nose"],
+ ["Beta Monocerotis","Triple star","Monoceros",97.20,-7.03,"4.6+5.0+5.4","7″","Stunning triple — Herschel called it one of the finest in the sky"],
+ ["La Superba (Y CVn)","Carbon star","Canes Venatici",191.28,45.44,"~5.2 var","—","One of the reddest stars visible — deep ruby"],
+ ["Hind's Crimson Star (R Lep)","Carbon star","Lepus",74.98,-14.81,"5.5–11.7 var","—","Glows like a drop of blood, best near maximum"],
+ ["TX Piscium","Carbon star","Pisces",356.61,3.49,"~5.0 var","—","Bright orange-red carbon star"],
+ ["V Aquilae","Carbon star","Aquila",286.10,-5.68,"6.6–8.1 var","—","Deep-red ember in the Milky Way"],
+ ["DY Crucis","Carbon star","Crux",191.83,-59.71,"8.5–9.8 var","—","Ruby spark right beside Mimosa — a 40 cm treat"]
+];
+function renderDoubles(){
+  const c=document.getElementById('doubles');if(!c)return;
+  if(!DARK){c.innerHTML='<div class="tsub">Sky not dark yet — pick an evening time.</div>';return;}
+  const rows=DBL.map(function(t){const a=altaz(t[3],t[4]);return{name:t[0],type:t[1],con:t[2],alt:a.alt,az:a.az,mags:t[5],sep:t[6],note:t[7]};}).filter(function(r){return r.alt>10;}).sort(function(a2,b2){return b2.alt-a2.alt;});
+  if(!rows.length){c.innerHTML='<div class="tsub">None of the catalogued pairs are above 10° at this time.</div>';return;}
+  c.innerHTML=rows.map(function(r){
+    const cls=r.alt>=40?'exc':(r.alt>=20?'good':'low');
+    const v=r.alt>=40?'Prime':(r.alt>=20?'Good':'Low');
+    const carbon=/Carbon/.test(r.type);
+    return '<div class="tcard"><div class="trow1"><div><div class="tname">'+(carbon?'🔴 ':'✨ ')+r.name+'</div><div class="tsub">'+r.type+' · '+r.con+' — '+r.note+'</div></div><span class="tag '+cls+'">'+v+'</span></div>'
+      +'<div class="chips"><span class="chip">⬆ <b>'+Math.round(r.alt)+'°</b></span><span class="chip">'+compass(r.az)+'</span><span class="chip">mags <b>'+r.mags+'</b></span>'+(r.sep!=='—'?'<span class="chip">sep <b>'+r.sep+'</b></span>':'')+'</div></div>';
+  }).join('');
+}
+function findConjunctions(){
+  const out=[];if(!GL)return out;
+  const P5=['Venus','Jupiter','Saturn','Mars','Mercury'];
+  for(let dd2=0;dd2<=21;dd2++){
+    const dt=new Date(Date.UTC(GL.y,GL.m,GL.d+dd2,20-8,30,0));
+    const J=jd(dt),dS=J-2451543.5,lstv=rev(280.46061837+360.98564736629*(J-2451545.0)+LON);
+    const aa=function(ra,dec){const H=(lstv-ra)*RAD,dr=dec*RAD,l=LAT*RAD;return Math.asin(Math.sin(dr)*Math.sin(l)+Math.cos(dr)*Math.cos(l)*Math.cos(H))*DEG;};
+    const s=sun(dS),mo=moon(dS),meq=eclToEq(mo.lon,mo.lat,dS),malt=aa(meq.ra,meq.dec);
+    const bodies={};
+    P5.forEach(function(nm){const pe=planetEq(PLAN[nm],dS,s.lon,s.r);bodies[nm]={ra:pe.ra,dec:pe.dec,alt:aa(pe.ra,pe.dec)};});
+    P5.forEach(function(nm){const b=bodies[nm],sp=angSep(meq.ra,meq.dec,b.ra,b.dec);
+      if(sp<5&&malt>0&&b.alt>5)out.push({dd:dd2,pair:'Moon–'+nm,sep:sp,ic:'🌙'});});
+    for(let i2=0;i2<P5.length;i2++)for(let j3=i2+1;j3<P5.length;j3++){
+      const A=bodies[P5[i2]],B2=bodies[P5[j3]],sp=angSep(A.ra,A.dec,B2.ra,B2.dec);
+      if(sp<2.5&&A.alt>5&&B2.alt>5)out.push({dd:dd2,pair:P5[i2]+'–'+P5[j3],sep:sp,ic:'🪐'});}
+  }
+  const best={};out.forEach(function(c2){const k=c2.pair;if(!best[k]||c2.sep<best[k].sep)best[k]=c2;});
+  return Object.keys(best).map(function(k){return best[k];}).sort(function(a2,b2){return a2.dd-b2.dd;});
+}
+function renderConj(){
+  const el=document.getElementById('conj');if(!el||!GL)return;
+  const cs=findConjunctions();
+  if(!cs.length){el.innerHTML='';return;}
+  el.innerHTML=cs.map(function(c2){
+    const dt=new Date(Date.UTC(GL.y,GL.m,GL.d+c2.dd,12));
+    const when=c2.dd===0?'chosen night':dateLabel(dt.getUTCFullYear(),dt.getUTCMonth(),dt.getUTCDate())+' · in '+c2.dd+' day'+(c2.dd>1?'s':'');
+    return '<div class="evrow"><span class="evic">'+c2.ic+'</span><div><b>'+c2.pair+' — just '+c2.sep.toFixed(1)+'° apart</b> <span class="evwhen">'+when+'</span><div class="evnote">Close pairing in the 8:30 pm sky — a lovely naked-eye / wide-field sight'+(c2.pair.indexOf('Moon')===0?' (Moon position geocentric; allow up to ~1° shift)':'')+'.</div></div></div>';
+  }).join('')+'<div class="tsub" style="margin:2px 0 10px">↑ Pairings computed on-device for 8:30 pm each evening, next 3 weeks.</div>';
+  const tonight=cs.filter(function(c2){return c2.dd===0;})[0];
+  if(tonight)EVT.unshift(['','✨',tonight.pair+' '+tonight.sep.toFixed(1)+'° apart','',1]);
+}
+let RADAT=0;
+function loadRadar(){
+  const el=document.getElementById('radar');if(!el)return;
+  if(Date.now()-RADAT<5*60000)return;RADAT=Date.now();
+  let tries=0;
+  const attempt=function(){
+    if(tries>5){el.style.display='block';el.innerHTML='<div class="wxsrc">Rain radar unavailable right now — <a href="https://www.weather.gov.sg/weather-rain-area-50km/" target="_blank" rel="noopener" style="color:var(--cyan)">open it on weather.gov.sg ↗</a></div>';return;}
+    const t=new Date(Math.floor((Date.now()+8*3600000-(tries*5+2)*60000)/300000)*300000);tries++;
+    const stamp=''+t.getUTCFullYear()+pad(t.getUTCMonth()+1)+pad(t.getUTCDate())+pad(t.getUTCHours())+pad(t.getUTCMinutes());
+    const img=new Image();
+    img.onload=function(){
+      el.style.display='block';
+      el.innerHTML='<div style="border-radius:10px;overflow:hidden;margin-top:11px;background:#0b1526 url(https://www.weather.gov.sg/wp-content/themes/wiptheme/assets/img/base-853.png) center/cover no-repeat">'
+        +'<img src="'+img.src+'" alt="MSS rain radar" style="width:100%;display:block">'
+        +'</div><div class="wxsrc">🛰️ MSS 50-km rain radar · '+timeLabel(t.getUTCHours(),t.getUTCMinutes())+' SGT — live now, so it applies to tonight, not future dates. <a href="https://www.weather.gov.sg/weather-rain-area-50km/" target="_blank" rel="noopener" style="color:var(--cyan)">animated loop ↗</a></div>';
+    };
+    img.onerror=attempt;
+    img.src='https://www.weather.gov.sg/files/rainarea/50km/v2/dpsri_70km_'+stamp+'0000dBR.dpsri.png';
+  };
+  attempt();
+}
+
 function moonRiseSet(y,m,d){
   const H0=0.125,startMs=Date.UTC(y,m,d,0,0,0)-8*3600000,step=5*60000,span=24*3600000;
   let prev=moonAltAt(new Date(startMs))-H0,rise=null,set=null;
@@ -1577,15 +2280,17 @@ function recompute(y,m,d,hh,mm){
 
   renderTargets();
   GL={y:y,m:m,d:d,hh:hh,mm:mm,dS:dS,sLon:s.lon,sR:s.r,sunAlt:sunAlt};
+  renderExtras();
   renderGlance();
   clearTimeout(WXT);WXT=setTimeout(function(){loadWeather(false);},350);
 }
 
-function tick(){let diff=startUTC-Date.now();const el=document.getElementById('cd');
-  if(diff<=0){el.textContent=diff>-9000000?"now 🔭":"—";return;}
+function tick(){let diff=startUTC-Date.now();const el=document.getElementById('cd'),el2=document.getElementById('cdSlim');
+  const setCd=t=>{if(el)el.textContent=t;if(el2)el2.textContent=t;};
+  if(diff<=0){setCd(diff>-9000000?"now 🔭":"—");return;}
   const dY=Math.floor(diff/86400000);diff-=dY*86400000;const h=Math.floor(diff/3600000);diff-=h*3600000;
   const mi=Math.floor(diff/60000);diff-=mi*60000;const sc=Math.floor(diff/1000);
-  el.textContent=(dY>0?dY+"d ":"")+pad(h)+":"+pad(mi)+":"+pad(sc);}
+  setCd((dY>0?dY+"d ":"")+pad(h)+":"+pad(mi)+":"+pad(sc));}
 
 document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('active',b.dataset.mode===currentMode));
 document.getElementById('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
@@ -1756,6 +2461,225 @@ document.getElementById('wxBtn').addEventListener('click',function(){loadWeather
   document.addEventListener('click',e=>{const el=e.target.closest&&e.target.closest('.hov');if(el){const r=el.getBoundingClientRect();if(shown&&tip._for===el){hide();}else{show(el,r.left,r.bottom);tip._for=el;}e.stopPropagation();}else hide();});
 })();
 
+// ==== v3.2: special events · ISS passes · haze · session plan · briefing ====
+let EVT=[],ISSCHIP='',ISSFOR='',PSIAT=0;
+const EVENTS=[
+ ['2026-07-28','☄️','Delta Aquariids meteor shower peaks','Up to 20/hr after midnight, but the full Moon washes most out this year.',1],
+ ['2026-08-02','🪐','Mercury at greatest western elongation','Morning object — low in the east before sunrise, not an evening-session target.',1],
+ ['2026-08-12','🌑','Total solar eclipse — not visible from Singapore','Path crosses the Arctic, Greenland, Iceland & Spain.',0],
+ ['2026-08-12','☄️','Perseids meteor shower peaks','Excellent year — New Moon, dark skies. Up to 60/hr after midnight; the radiant sits low in the north from Singapore, so rates are reduced but bright ones still get through.',1],
+ ['2026-08-15','🪐','Venus at greatest eastern elongation','Brilliant "evening star" in the west after sunset — a session showpiece.',1],
+ ['2026-08-28','🌕','Partial lunar eclipse — not visible from Singapore','Visible from the Americas, Europe & Africa.',0],
+ ['2026-09-25','🪐','Neptune at opposition','Closest & brightest of the year — a tiny blue dot for the 40 cm.',1],
+ ['2026-10-04','🪐','Saturn at opposition','Closest & brightest of the year, up all night — prime target for every scope on deck.',1],
+ ['2026-10-07','☄️','Draconids meteor shower peaks','Minor (~10/hr) early-evening shower, but the radiant is very low from Singapore.',1],
+ ['2026-10-12','🪐','Mercury at greatest eastern elongation','Best evening view — very low in the west just after sunset.',1],
+ ['2026-10-21','☄️','Orionids meteor shower peaks','Up to 20/hr from Halley\'s dust; Moon sets after midnight and the radiant is well placed from Singapore.',1],
+ ['2026-11-04','☄️','Taurids meteor shower peaks','Slow, bright fireballs, ~5–10/hr, best after midnight.',1],
+ ['2026-11-17','☄️','Leonids meteor shower peaks','Up to 15/hr after the Moon sets around midnight.',1],
+ ['2026-11-24','🌕','Full Moon — supermoon','Slightly bigger & brighter than usual — great on the deck scopes, bad for faint targets.',1],
+ ['2026-11-25','🪐','Uranus at opposition','Closest & brightest of the year — blue-green dot in the bigger scopes.',1],
+ ['2026-12-13','☄️','Geminids meteor shower peaks','King of the showers — up to 120/hr and the crescent Moon sets early. Radiant climbs from ~9 pm in Singapore; an excellent year.',1],
+ ['2026-12-21','☄️','Ursids meteor shower peaks','Far-northern radiant sits on/below Singapore\'s horizon — effectively not observable here.',0],
+ ['2026-12-23','🌕','Full Moon — supermoon','Slightly bigger & brighter than usual.',1],
+ ['2027-01-03','☄️','Quadrantids meteor shower peaks','Up to 40/hr after midnight; little moonlight, but the radiant stays very low from Singapore.',1],
+ ['2027-01-03','🪐','Venus at greatest western elongation','Brilliant "morning star" before sunrise.',1],
+ ['2027-01-22','🌕','Full Moon — supermoon','Slightly bigger & brighter than usual.',1],
+ ['2027-02-03','🪐','Mercury at greatest eastern elongation','Low in the west just after sunset.',1],
+ ['2027-02-06','🌑','Annular solar eclipse — not visible from Singapore','Path crosses the south Pacific, Chile & Argentina.',0],
+ ['2027-02-10','🪐','Jupiter at opposition','Closest & brightest of the year, up all night — cloud belts & the four Galilean moons in any scope.',1],
+ ['2027-02-19','🪐','Mars at opposition','Closest & brightest of the year — surface markings in the 40 cm.',1],
+ ['2027-02-20','🌕','Penumbral lunar eclipse — not visible from Singapore','Subtle shading, visible from the Americas, Europe, Africa & western Asia. Also a supermoon.',0],
+ ['2027-04-22','☄️','Lyrids meteor shower peaks','~20/hr, but a nearly-full Moon washes most out this year.',1],
+ ['2027-05-06','☄️','Eta Aquariids meteor shower peaks','Excellent year — no Moon. Up to 60/hr before dawn from Halley\'s dust; one of the best showers for Singapore\'s latitude.',1],
+ ['2027-05-28','🪐','Mercury at greatest eastern elongation','Low in the west just after sunset.',1],
+ ['2027-07-15','🪐','Mercury at greatest western elongation','Morning object before sunrise.',1],
+ ['2027-07-18','🌕','Penumbral lunar eclipse — visible from Singapore','Subtle darkening of the full Moon; visible across Southeast Asia & Australia.',1],
+ ['2027-07-28','☄️','Delta Aquariids meteor shower peaks','~20/hr after midnight; waning crescent Moon — a decent year.',1],
+ ['2027-08-02','🌑','Total solar eclipse — not visible from Singapore','Path crosses North Africa & the Middle East; partial from Europe to India.',0],
+ ['2027-08-12','☄️','Perseids meteor shower peaks','Waxing gibbous Moon interferes; radiant low from Singapore.',1],
+ ['2027-09-24','🪐','Mercury at greatest eastern elongation','Best evening apparition of the year (26° from the Sun), low in the west after sunset.',1],
+ ['2027-09-28','🪐','Neptune at opposition','Tiny blue dot at its brightest for the year.',1],
+ ['2027-10-07','☄️','Draconids meteor shower peaks','Minor early-evening shower; radiant very low from Singapore.',1],
+ ['2027-10-18','🪐','Saturn at opposition','Closest & brightest of the year — rings on show all night.',1],
+ ['2027-10-21','☄️','Orionids meteor shower peaks','~20/hr after midnight; some moonlight interferes.',1],
+ ['2027-11-04','☄️','Taurids meteor shower peaks','Slow bright fireballs, ~5–10/hr after midnight.',1],
+ ['2027-11-17','☄️','Leonids meteor shower peaks','Near-full Moon spoils all but the brightest this year.',1],
+ ['2027-11-30','🪐','Uranus at opposition','Blue-green dot at its brightest for the year.',1],
+ ['2027-12-13','☄️','Geminids meteor shower peaks','Up to 120/hr, but a full Moon hurts this year.',1]
+];
+function renderEvents(){
+  const el=document.getElementById('events');if(!el||!GL)return;
+  const cur=Date.UTC(GL.y,GL.m,GL.d);let html='';EVT=[];
+  EVENTS.forEach(ev=>{const p=ev[0].split('-').map(Number),t=Date.UTC(p[0],p[1]-1,p[2]);
+    const dd=Math.round((t-cur)/86400000);if(dd<0||dd>21)return;
+    if(dd===0&&ev[4])EVT.push(ev);
+    const when=dd===0?'chosen night':(dd===1?'next night':dateLabel(p[0],p[1]-1,p[2])+' · in '+dd+' days');
+    html+='<div class="evrow'+(ev[4]?'':' dim')+'"><span class="evic">'+ev[1]+'</span><div><b>'+ev[2]+'</b> <span class="evwhen">'+when+'</span><div class="evnote">'+ev[3]+'</div></div></div>';});
+  el.innerHTML=html||'<div class="tsub">No major sky events in the 3 weeks after the chosen date — pick a later date to look further ahead.</div>';
+}
+function skyAt(hh,mm){
+  const dt=new Date(Date.UTC(GL.y,GL.m,GL.d,hh-8,mm,0));
+  const J=jd(dt),dS=J-2451543.5;
+  const lstv=rev(280.46061837+360.98564736629*(J-2451545.0)+LON);
+  const aa=(ra,dec)=>{const H=(lstv-ra)*RAD,dr=dec*RAD,l=LAT*RAD;
+    const alt=Math.asin(Math.sin(dr)*Math.sin(l)+Math.cos(dr)*Math.cos(l)*Math.cos(H))*DEG;
+    let az=Math.atan2(-Math.cos(dr)*Math.sin(H),Math.sin(dr)*Math.cos(l)-Math.cos(dr)*Math.sin(l)*Math.cos(H))*DEG;
+    return{alt,az:rev(az)};};
+  const s=sun(dS),seq=eclToEq(s.lon,0,dS),sa=aa(seq.ra,seq.dec).alt;
+  const mo=moon(dS),meq=eclToEq(mo.lon,mo.lat,dS),ma=aa(meq.ra,meq.dec);
+  const pls=[];for(const nm of Object.keys(PLAN)){const pe=planetEq(PLAN[nm],dS,s.lon,s.r);const a2=aa(pe.ra,pe.dec);pls.push({name:nm,alt:a2.alt,az:a2.az,mag:pe.mag});}
+  const tg=CAT.map(t=>{const a2=aa(t[3],t[4]);return{name:t[0],type:t[1],alt:a2.alt,az:a2.az,cls:t[5],mag:t[6]};}).filter(r=>r.alt>15).sort((a2,b2)=>b2.alt-a2.alt);
+  return{sunAlt:sa,moonAlt:ma.alt,moonAz:ma.az,planets:pls,targets:tg};
+}
+function renderPlan(){
+  const el=document.getElementById('plan');if(!el||!GL)return;
+  let html='';
+  [[19,30],[20,30],[21,30]].forEach(sl=>{
+    const sk=skyAt(sl[0],sl[1]);const rows=[];
+    if(sk.sunAlt>-6)rows.push('Sky still bright — welcome & orientation talk'+(sk.moonAlt>10?'; the Moon is already up, start the deck queues on it':'')+'.');
+    if(sk.moonAlt>10)rows.push('🌙 <b>Moon</b> ('+Math.round(sk.moonAlt)+'° '+compass(sk.moonAz)+') — deck <b>Celestron CPC / C6</b>: fast, queue-friendly views of the terminator.');
+    const vis=sk.planets.filter(p=>p.alt>12&&['Venus','Mars','Jupiter','Saturn','Mercury'].indexOf(p.name)>=0&&sk.sunAlt<-3).sort((a2,b2)=>a2.mag-b2.mag);
+    if(vis[0])rows.push('🪐 <b>'+vis[0].name+'</b> ('+Math.round(vis[0].alt)+'° '+compass(vis[0].az)+') — <b>40 cm main dome</b> for maximum detail; overflow on the 11&quot;.');
+    if(vis[1])rows.push('🪐 <b>'+vis[1].name+'</b> ('+Math.round(vis[1].alt)+'° '+compass(vis[1].az)+') — <b>11&quot; second dome</b>.');
+    if(sk.sunAlt<-12){
+      const glob=sk.targets.find(t=>/Globular/i.test(t.type)&&t.alt>25);
+      if(glob)rows.push('✨ <b>'+glob.name+'</b> ('+Math.round(glob.alt)+'°) — <b>40 cm</b> resolves the core; crisp in the <b>6&quot; apo</b>.');
+      const oc=sk.targets.find(t=>/Open cluster/i.test(t.type)&&t.alt>25&&t.mag!=null&&t.mag<6.5);
+      if(oc)rows.push('✨ <b>'+oc.name+'</b> ('+Math.round(oc.alt)+'°) — wide-field in the <b>6&quot; apo</b> / portable scopes.');
+      const em=sk.targets.find(t=>t.cls==='emission'&&t.alt>25);
+      if(em)rows.push('📷 <b>'+em.name+'</b> ('+Math.round(em.alt)+'°) — <b>Seestar S30 Pro</b> dual-band imaging'+(pct>=55?' (the Hα/OIII filter beats the moonlight)':'')+'.');
+    }
+    if(!rows.length)rows.push('Nothing well placed yet — sky tour & constellation talk.');
+    html+='<div class="planslot"><h3>'+timeLabel(sl[0],sl[1])+'</h3><ul>'+rows.map(r=>'<li>'+r+'</li>').join('')+'</ul></div>';
+  });
+  el.innerHTML=html+'<div class="tsub" style="margin-top:6px">Auto-generated from computed altitudes & the SCOB fleet for the chosen date — adjust on the night.</div>';
+}
+function loadScript(src){return new Promise((res,rej)=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc);});}
+const SATS=[
+ {nm:'ISS',cat:25544,note:'Naked-eye — a brilliant "star" gliding across the sky in a few minutes.'},
+ {nm:'Tiangong',cat:48274,note:'China\'s space station — nearly as bright as the ISS, same graceful glide.'},
+ {nm:'Hubble',cat:20580,note:'The Hubble Space Telescope — fainter (mag ~2–3); easiest in binoculars.'}
+];
+async function getTLE(cat){
+  const key='scobTLE_'+cat;
+  let cached=null;try{cached=JSON.parse(localStorage.getItem(key)||'null');}catch(e){}
+  if(cached&&Date.now()-cached.ts<3*86400000)return cached;
+  try{
+    const r=await fetch('https://celestrak.org/NORAD/elements/gp.php?CATNR='+cat+'&FORMAT=TLE',{cache:'no-store'});
+    if(!r.ok)throw 0;
+    const L=(await r.text()).trim().split(/\r?\n/);
+    if(L.length<3)throw 0;
+    const c={l1:L[1].trim(),l2:L[2].trim(),ts:Date.now()};
+    try{localStorage.setItem(key,JSON.stringify(c));}catch(e){}
+    return c;
+  }catch(e){return cached;}
+}
+function issSunlit(pos,dt){const dS=jd(dt)-2451543.5,s=sun(dS),eq=eclToEq(s.lon,0,dS);
+  const ra=eq.ra*RAD,dec=eq.dec*RAD;
+  const sv=[Math.cos(dec)*Math.cos(ra),Math.cos(dec)*Math.sin(ra),Math.sin(dec)];
+  const dot=pos.x*sv[0]+pos.y*sv[1]+pos.z*sv[2];
+  if(dot>0)return true;
+  const r2=pos.x*pos.x+pos.y*pos.y+pos.z*pos.z;
+  return Math.sqrt(Math.max(0,r2-dot*dot))>6371;}
+async function loadISS(){
+  const box=document.getElementById('iss');if(!box||!GL)return;
+  const key=GL.y+'-'+pad(GL.m+1)+'-'+pad(GL.d);
+  if(ISSFOR===key)return;ISSFOR=key;ISSCHIP='';
+  box.innerHTML='<div class="tsub">Computing evening passes…</div>';
+  try{
+    if(typeof satellite==='undefined')await loadScript('https://cdnjs.cloudflare.com/ajax/libs/satellite.js/5.0.0/satellite.min.js');
+    const obs={latitude:LAT*RAD,longitude:LON*RAD,height:0.02};
+    const base=Date.UTC(GL.y,GL.m,GL.d,0,0,0)-8*3600000;
+    const all=[];let maxAge=0,got=0;
+    for(const st of SATS){
+      const tle=await getTLE(st.cat);if(!tle)continue;got++;
+      maxAge=Math.max(maxAge,Math.round((Date.now()-tle.ts)/86400000));
+      const rec=satellite.twoline2satrec(tle.l1,tle.l2);
+      let cur=null;
+      for(let sec=19*3600;sec<=23*3600;sec+=10){
+        const dt=new Date(base+sec*1000);
+        const pv=satellite.propagate(rec,dt);if(!pv||!pv.position)continue;
+        const la=satellite.ecfToLookAngles(obs,satellite.eciToEcf(pv.position,satellite.gstime(dt)));
+        const elv=la.elevation*DEG;
+        if(elv>10){
+          const vis=sunAltAt(dt)<-6&&issSunlit(pv.position,dt);
+          if(!cur)cur={sat:st,s:dt,sAz:la.azimuth*DEG,maxEl:elv,maxAz:la.azimuth*DEG,maxT:dt,vis:vis,e:dt,eAz:la.azimuth*DEG};
+          else{if(elv>cur.maxEl){cur.maxEl=elv;cur.maxAz=la.azimuth*DEG;cur.maxT=dt;}cur.vis=cur.vis||vis;}
+          cur.e=dt;cur.eAz=la.azimuth*DEG;
+        }else if(cur){all.push(cur);cur=null;}
+      }
+      if(cur)all.push(cur);
+    }
+    if(!got)throw 0;
+    all.sort((a2,b2)=>a2.s-b2.s);
+    const fmt=dt=>{const t=new Date(dt.getTime()+8*3600000);return timeLabel(t.getUTCHours(),t.getUTCMinutes());};
+    if(!all.length){box.innerHTML='<div class="tsub">No ISS, Tiangong or Hubble passes above 10° between 7 pm and 11 pm this night.</div>';}
+    else{
+      box.innerHTML=all.map(p=>{
+        const tag=p.vis?'<span class="tag exc">visible</span>':'<span class="tag below">in Earth\'s shadow</span>';
+        return '<div class="evrow"><span class="evic">🛰️</span><div><b>'+p.sat.nm+' · '+fmt(p.s)+' → '+fmt(p.e)+'</b> '+tag+'<div class="evnote">Rises '+compass(p.sAz)+', peaks <b>'+Math.round(p.maxEl)+'°</b> in the '+compass(p.maxAz)+' at '+fmt(p.maxT)+', sets '+compass(p.eAz)+'. '+p.sat.note+'</div></div></div>';
+      }).join('')+'<div class="tsub" style="margin-top:6px">ISS · Tiangong · Hubble — computed on-device from CelesTrak orbital elements ('+(maxAge<1?'fetched today':'up to '+maxAge+' days old')+'). Times drift as orbits are adjusted — accurate within a few days of the TLE.</div>';
+      const best=all.filter(p=>p.vis).sort((a2,b2)=>b2.maxEl-a2.maxEl)[0];
+      if(best){ISSCHIP=best.sat.nm+' '+fmt(best.s)+' · '+Math.round(best.maxEl)+'°';renderGlance();}
+    }
+  }catch(e){box.innerHTML='<div class="tsub">⚠️ Needs a connection once to fetch satellite orbits from CelesTrak — try again when online.</div>';ISSFOR='';}
+}
+async function loadPSI(){
+  const el=document.getElementById('haze');if(!el)return;
+  if(Date.now()-PSIAT<15*60000)return;
+  try{
+    const r=await fetch('https://api.data.gov.sg/v1/environment/psi',{cache:'no-store'});
+    const j=await r.json();const it=j.items&&j.items[0];if(!it)throw 0;
+    const psi=it.readings.psi_twenty_four_hourly.west;
+    PSIAT=Date.now();
+    let band='Good',cls='ok',note='no haze penalty on transparency.';
+    if(psi>100){band='Unhealthy';cls='bad';note='haze will noticeably dim stars and kill faint targets.';}
+    else if(psi>50){band='Moderate';cls='warn';note='slight loss of transparency on faint fuzzies.';}
+    el.style.display='block';
+    el.innerHTML='🌫️ <b>Haze right now (West):</b> 24-h PSI <b class="'+cls+'">'+psi+' · '+band+'</b> — '+note+' <span style="opacity:.75">Live NEA reading — applies to tonight, not to future dates.</span>';
+  }catch(e){}
+}
+function buildBriefing(){
+  if(!GL)return;const q=id=>{const e2=document.getElementById(id);return e2?e2.textContent.trim():'';};
+  const y=GL.y,m=GL.m,d=GL.d,hh=GL.hh,mm=GL.mm,st=sunTimes(y,m,d);
+  let planets='';document.querySelectorAll('#solar .srow').forEach(r=>{
+    const c1=r.querySelector('.snm'),c2=r.querySelector('.sval'),c3=r.querySelector('.smag'),c4=r.querySelector('.tag');
+    planets+='<tr><td>'+(c1?c1.textContent:'')+'</td><td>'+(c2?c2.textContent:'')+'</td><td>'+(c3?c3.textContent:'')+'</td><td>'+(c4?c4.textContent:'')+'</td></tr>';});
+  let targs='',n=0;
+  document.querySelectorAll('#targets .tcard').forEach(t=>{if(n>=10)return;n++;
+    targs+='<tr><td>'+t.querySelector('.tname').textContent+'</td><td>'+t.querySelector('.tsub').textContent+'</td><td>'+(t.querySelector('.tag')?t.querySelector('.tag').textContent:'')+'</td><td>'+Array.prototype.map.call(t.querySelectorAll('.chip'),c=>c.textContent).join(' · ')+'</td></tr>';});
+  let dbls='';document.querySelectorAll('#doubles .tcard').forEach(t=>{
+    dbls+='<tr><td>'+t.querySelector('.tname').textContent+'</td><td>'+(t.querySelector('.tag')?t.querySelector('.tag').textContent:'')+'</td><td>'+Array.prototype.map.call(t.querySelectorAll('.chip'),c=>c.textContent).join(' · ')+'</td></tr>';});
+  const gv=document.querySelector('#glance .gv');
+  const part=id=>{const e2=document.getElementById(id);return e2?e2.innerHTML:'';};
+  document.getElementById('briefing').innerHTML=
+    '<h1>🔭 SCOB Night-Sky Briefing</h1>'
+    +'<div class="sub">Science Centre Observatory, Jurong · <b>'+dateLabel(y,m,d)+'</b> · session 7:30–10:00 pm SGT · positions shown for '+timeLabel(hh,mm)+'</div>'
+    +'<h2>Tonight at a glance</h2><p>'+(gv?gv.textContent:'—')+'<br>🌇 Sunset <b>'+(st.set||'—')+'</b> · 🌌 Fully dark <b>'+(st.dark||'—')+'</b> · 🌅 Sunrise <b>'+(st.rise||'—')+'</b></p>'
+    +'<h2>Weather</h2><p>'+q('weatherNote')+'</p>'+(q('haze')?'<p>'+q('haze')+'</p>':'')
+    +'<h2>Moon</h2><p><b>'+q('moonPct')+' lit — '+q('moonName')+'</b> · '+q('moonRS')+'<br>'+q('moonNote')+'</p>'
+    +'<h2>Solar system at '+timeLabel(hh,mm)+'</h2><table><tr><th>Object</th><th>Alt · direction</th><th>Mag</th><th>Verdict</th></tr>'+planets+'</table>'
+    +'<h2>Jupiter &amp; Saturn in the eyepiece</h2>'+part('planetDetail')
+    +'<h2>Top deep-sky targets ('+(currentMode==='seestar'?'Seestar S30 imaging':'visual')+')</h2>'+(targs?'<table><tr><th>Target</th><th>Type</th><th>Verdict</th><th>Alt · dir · mag · Moon sep</th></tr>'+targs+'</table>':'<p>Sky not dark at the chosen time — pick an evening time first.</p>')
+    +(dbls?'<h2>Double &amp; carbon stars — moon-proof</h2><table><tr><th>Star</th><th>Verdict</th><th>Alt · dir · mags · sep</th></tr>'+dbls+'</table>':'')
+    +'<h2>Conjunctions &amp; special events — next 3 weeks</h2>'+part('conj')+part('events')
+    +'<h2>Satellite passes — ISS · Tiangong · Hubble (7–11 pm)</h2>'+part('iss')
+    +'<h2>Suggested session run-sheet</h2>'+part('plan')
+    +'<div class="src">Sources: deep-sky catalogue — AstroPixels Messier &amp; Caldwell catalogs (F. Espenak) · planetary orbital elements — P. Schlyter · Jupiter/Saturn physical ephemeris — J. Meeus, Astronomical Algorithms · GRS longitude — JUPOS trend · double/carbon star data — WDS &amp; SIMBAD (compiled) · weather &amp; rain radar — Open-Meteo &amp; MSS weather.gov.sg · haze — NEA via data.gov.sg · sky events — Sea &amp; Sky astronomy calendar (seasky.org) · ISS/Tiangong/Hubble orbits — CelesTrak TLEs, propagated on-device with satellite.js · Science Centre Observatory, Singapore.</div>';
+}
+(function(){
+  const bBtn=document.getElementById('briefBtn'),bW=document.getElementById('briefWrap');
+  if(bBtn&&bW){
+    bBtn.addEventListener('click',()=>{buildBriefing();bW.style.display='block';document.body.classList.add('briefing-open');});
+    document.getElementById('briefClose').addEventListener('click',()=>{bW.style.display='none';document.body.classList.remove('briefing-open');});
+    document.getElementById('briefPrint').addEventListener('click',()=>window.print());
+  }
+  const wb=document.getElementById('wxBtn');if(wb)wb.addEventListener('click',()=>{PSIAT=0;loadPSI();RADAT=0;loadRadar();});
+})();
+function renderExtras(){renderEvents();renderConj();renderPlanetDetail();renderDoubles();renderPlan();loadISS();}
+loadPSI();loadRadar();
+
 const f0=nextFridayYMD();
 recompute(f0.y,f0.m,f0.d,20,30);
 tick();setInterval(tick,1000);
@@ -1814,4 +2738,3 @@ if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.s
 })();
 </script>
 </body>
-</html>
